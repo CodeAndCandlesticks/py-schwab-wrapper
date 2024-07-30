@@ -162,6 +162,11 @@ cython_debug/
 #.idea/
 
 # Prevent future accidental upload of certificates
+
+# Ignore .pem files
 cert.pem
 key.pem
 .pem
+
+# Ignore token.json file
+token.json
