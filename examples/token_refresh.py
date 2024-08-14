@@ -26,7 +26,7 @@ def refresh_token():
     schwab_api = SchwabAPI(client_id=client_id, client_secret=client_secret)
     token = schwab_api.load_token()
     refresh_token = token.get('refresh_token')
-    print (refresh_token)
+    print(refresh_token)
     token_expiry = token.get('expires_at')
 
     if refresh_token and token_expiry:
@@ -37,8 +37,13 @@ def refresh_token():
                 return
             else:
                 print('Attempting to refresh the token...')
-                schwab = OAuth2Session(client_id)
-                new_token = schwab.refresh_token(token_url, refresh_token=refresh_token, client_id=client_id, client_secret=client_secret)
+                oauth = OAuth2Session(client_id, token=token)
+                new_token = oauth.refresh_token(
+                    token_url,
+                    refresh_token=refresh_token,
+                    client_id=client_id,
+                    client_secret=client_secret
+                )
                 schwab_api.save_token(new_token)
                 print('Token refreshed successfully!')
                 new_expiry_datetime = datetime.fromtimestamp(float(new_token['expires_at'])).strftime('%Y-%m-%d %H:%M:%S')
