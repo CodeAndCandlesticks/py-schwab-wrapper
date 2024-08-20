@@ -15,7 +15,7 @@ class SchwabAPI:
         self.base_url = base_url
         self.token_url = f"{base_url}/v1/oauth/token"
         self.token = self.load_token()
-        self.session = self.authenticate()
+        #self.session = self.authenticate()
 
     def load_token(self):
         try:
@@ -32,36 +32,64 @@ class SchwabAPI:
     def save_token(self, token):
         self.token = token
         with open('token.json', 'w') as token_file:
-            json.dump(token, token_file)
+            json.dump(token, token_file, indent=4)
 
     def refresh_token(self):
-        logging.basicConfig(level=logging.DEBUG)
-        oauth = OAuth2Session(self.client_id, token=self.token)
+        schwab_api = SchwabAPI(client_id=client_id, client_secret=client_secret)
+        token = schwab_api.load_token()
+        refresh_token = token.get('refresh_token')
+        # Encode client_id:client_secret in Base64
+        auth_str = f"{client_id}:{client_secret}"
+        base64_auth_str = base64.b64encode(auth_str.encode('utf-8')).decode('utf-8')
+        token_expiry = token.get('expires_at')
 
-        # Prepare the request details
-        refresh_token_url = self.token_url
-        refresh_token = self.token['refresh_token']
-        client_id = self.client_id
-        client_secret = self.client_secret
+        if refresh_token:
+            if token_expiry and float(token_expiry) > time.time():
+                expiry_datetime = datetime.fromtimestamp(float(token_expiry)).strftime('%Y-%m-%d %H:%M:%S')
+                print(f'Token is still valid, no need to refresh. Token expires at: {expiry_datetime}')
+            else:   
+                try:
+                    print('Attempting to refresh the token...')
 
-        # Print the request details for debugging
-        logging.debug(f"Refresh Token URL: {refresh_token_url}")
-        logging.debug(f"Refresh Token: {refresh_token}")
-        logging.debug(f"Client ID: {client_id}")
-        logging.debug(f"Client Secret: {client_secret}")
+                    # Create the headers for the request
+                    headers = {
+                        'Authorization': f'Basic {base64_auth_str}',
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
 
-        try:
-            new_token = oauth.refresh_token(
-                refresh_token_url,
-                refresh_token=refresh_token,
-                client_id=client_id,
-                client_secret=client_secret
-            )
-            self.save_token(new_token)
-            logging.debug(f"New Token: {json.dumps(new_token, indent=2)}")
-        except Exception as e:
-            logging.error(f"Error during token refresh: {e}")
-            raise e
+                    # Prepare the payload
+                    payload = {
+                        'grant_type': 'refresh_token',
+                        'refresh_token': refresh_token
+                    }
+
+                    # Make the POST request to refresh the token
+                    response = requests.post(token_url, headers=headers, data=payload)
+
+                    # Handle the response
+                    if response.status_code == 200:
+                        new_token = response.json()
+                        if 'access_token' in new_token and 'expires_in' in new_token:
+                            expires_in = new_token.get('expires_in')
+                            if expires_in:
+                                new_token['expires_at'] = time.time() + int(expires_in)
+                            schwab_api.save_token(new_token)
+                            print('Token refreshed and saved successfully!')
+                        else:
+                            print(f'Unexpected token response: {new_token}')
+                    elif response.status_code == 401:
+                        print('Unauthorized. Check your client_id and client_secret.')
+                    elif response.status_code == 400:
+                        print('Bad request. Check the refresh token or payload.')
+                    else:
+                        print(f'Unexpected error: {response.status_code}')
+                            
+                except RequestException as e:
+                    print(f'Network error: {e}')
+                except ValueError as e:
+                    print(f'Error parsing token response: {e}')
+        else:
+            print('No refresh token available.')
 
     def authenticate(self):
         if self.token['expires_at'] < time.time():

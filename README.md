@@ -44,30 +44,9 @@ Follow the prompts to provide the necessary information. This will create key.pe
 
 # Example usage:
 ```
-    if __name__ == "__main__":
-        client_id = 'your_client_id'
-        client_secret = 'your_client_secret'
-        base_url = 'https://api.schwab.com'
+ python authenticate.py // spins up a webserver to obtain initial authentication token
 
-        schwab_api = SchwabAPI(client_id, client_secret, base_url)
+ python token_refresh.py // attempts to retrieve a new token if a token already exists
 
-        # Get account information
-        account_info = schwab_api.get_account_info()
-        print(account_info)
-
-        # Place an order
-        order_data = {
-            "symbol": "AAPL",
-            "qty": 10,
-            "side": "buy",
-            "type": "market",
-            "time_in_force": "gtc"
-        }
-        account_id = 'your_account_id'
-        order_response = schwab_api.place_order(account_id, order_data)
-        print(order_response)
-
-        # Get market data
-        market_data = schwab_api.get_market_data("AAPL")
-        print(market_data)
+  python test_api.py // attempts a history quote call using existing token (no auto refresh)
 ```
