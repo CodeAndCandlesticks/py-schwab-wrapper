@@ -1,0 +1,7 @@
+requests
+python-dotenv
+pytz
+flask
+requests-oauthlib
+pytest
+requests-mock
