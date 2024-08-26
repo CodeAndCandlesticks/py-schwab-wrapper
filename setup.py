@@ -1,22 +1,29 @@
 from setuptools import setup, find_packages
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
-    name='schwab_api_wrapper',
-    version='0.1.0',
+    name="py_schwab_wrapper",  # This is the name that will be used for `pip install`
+    version="0.1.0",  # Update this with each release
+    author="Luis Perez",
+    author_email="luispe@gmail.com",
+    description="A Python wrapper for Schwab API",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/CodeAndCandlesticks/py-schwab-wrapper", 
     packages=find_packages(),
     install_requires=[
-        'requests',
-        'requests_oauthlib',
+        "requests",
+        "python-dotenv",
+        "pytz",
+        "flask",
+        "requests-oauthlib"
     ],
-    description='A Python wrapper for Schwab Developer APIs',
-    author='Luis Perez',
-    author_email='luispe@gmail.com',
-    url='https://github.com/CodeAndCandlesticks/py-schwab-wrapper',
-    license='MIT',
     classifiers=[
-        'Development Status :: 3 - Alpha',
-        'Intended Audience :: Developers',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.8',
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License", 
+        "Operating System :: OS Independent",
     ],
+    python_requires='>=3.6',
 )
