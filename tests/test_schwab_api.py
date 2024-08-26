@@ -9,7 +9,7 @@ import pytz
 def schwab_api(monkeypatch):
     # Mock the token to simulate a valid token
     def mock_load_token():
-        return load_test_data("mock_token.json")
+        return load_test_data("sample_token.json")
     
     api = SchwabAPI(client_id="test_client_id", client_secret="test_client_secret")
     monkeypatch.setattr(api, "load_token", mock_load_token)
