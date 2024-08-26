@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import pytz
 from requests.exceptions import RequestException
 import logging
+import json
 
 # Add the project root to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -17,6 +18,17 @@ load_dotenv()
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
+
+def save_price_history_to_json(api_response, filename="price_history_response.json"):
+    """
+    Save the price history API response to a JSON file with indent=4.
+    
+    :param api_response: The response object from the API call.
+    :param filename: The name of the file to save the JSON data to.
+    """
+    with open(filename, "w") as f:
+        json.dump(api_response, f, indent=4)
+    print(f"Price history response saved to {filename}")
 
 def get_milliseconds_since_epoch(dt):
     return int(dt.timestamp() * 1000)
@@ -35,7 +47,8 @@ def main():
     try:
         # Set timezone to Eastern (for NYSE trading hours)
         eastern = pytz.timezone('America/New_York')
-        now = datetime.now(eastern)
+        #now = datetime.now(eastern) ## partial trading day if ran during trading hours
+        now = eastern.localize(datetime(2024, 8, 23)) ## full trading day
         start_of_day = now.replace(hour=9, minute=30, second=0, microsecond=0)
         end_of_day = now.replace(hour=16, minute=0, second=0, microsecond=0)
 
@@ -54,17 +67,11 @@ def main():
         # Fetch and print price history data for a symbol
         symbol = 'QQQ'
         price_history = schwab_api.get_price_history(
-            symbol, 
-            periodType='day', 
-            period=1, 
-            frequencyType='minute', 
-            frequency=5, 
-            needExtendedHoursData=False, 
-            needPreviousClose=True, 
-            startDate=startDate, 
-            endDate=endDate
+            symbol
         )
         print(f"Price History Data for {symbol}:", price_history)
+        # Save the API response to a JSON file
+        save_price_history_to_json(price_history, filename=f"QQQ-default.json")
 
     except ValueError as ve:
         print("ValueError:", ve)

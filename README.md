@@ -108,4 +108,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgements
 
-This project was developed with assistance from ChatGPT by OpenAI. Special thanks to the tool and the team behind it for providing valuable guidance and helping to refine the architecture and implementation of the package.
+This project was developed with assistance from ChatGPT by OpenAI. 
+Also special thanks to [rderik]() for the motivation and inspriation to pursue this project.

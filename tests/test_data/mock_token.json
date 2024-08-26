@@ -1,0 +1,9 @@
+{
+    "expires_in": 1800,
+    "token_type": "Bearer",
+    "scope": "api",
+    "refresh_token": "MkN_T6L--B9xvpABUayshEwBRmutaBBBdF0NzbjjB3z4E@",
+    "access_token": "I0.MkN_T6L.7GncqNq816uHzweEbTu6BacxQ6Upb1RwWp_6kj4djYM@",
+    "id_token": "7GncqNq816uHzweEbTu6BacxQ6Upb1RwWp_6kj4djYM.eyJzdWIiOiJkOTUxOWRjYWY0ZGE3NGZmNDA2MTgzODk0NTlmMTVkYTI4NTVhMjZmNzE1ZTcwMTY1ZWEyOTliMjgzZDI4Nzc1IiwiYXVkIjoiYm8xQjJLQ0pYTnpZTkVCZnpMTllBMG5hZWFTbzN0YmkiLCJpc3MiOiJ1cm46Ly9hcGkuc2Nod2FiYXBpLmNvbSIsImV4cCI6MTcyNDY5ODAzMiwiaWF0IjoxNzI0Njk0NDMyLCJqdGkiOiIyNDE1MWY2Ni04MDlhLTQ1OWYtODY2ZS1lZjJmZGRiZWQwNTUifQ.9Y1VRGyZJ623JY5S0rNbP89hQPvg2xVwwiLHEb_9eTU",
+    "expires_at": 1724696232.476014
+}
