@@ -5,3 +5,6 @@ flask
 requests-oauthlib
 pytest
 requests-mock
+setuptools
+wheel
+twine
