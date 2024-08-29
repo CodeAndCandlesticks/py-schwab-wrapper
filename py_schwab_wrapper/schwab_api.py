@@ -2,7 +2,7 @@
 
 import time
 import json
-from requests.exceptions import RequestException
+from requests.exceptions import RequestException, HTTPError, Timeout, ConnectionError
 import base64
 from datetime import datetime
 import requests
@@ -119,17 +119,32 @@ class SchwabAPI:
             raise  # Re-raise the error for upstream handling
 
     def get_with_retry(self, url, params=None, retries=3):
-        for _ in range(retries):
+        last_exception = None
+        for attempt in range(retries):
             try:
                 response = self.session.get(url, params=params)
-                response.raise_for_status()  # Ensure we can raise exceptions for HTTP errors
-                return response  # Return the full Response object, not the JSON
+                response.raise_for_status()  # Raise HTTPError for bad responses (4xx, 5xx)
+                return response  # Return the full Response object
+            except HTTPError as e:
+                if e.response.status_code == 401:  # Do not retry on 401 Unauthorized
+                    print(f"Unauthorized (401) error: {e}. Not retrying.")
+                    raise e
+                last_exception = e
+                print(f"Attempt {attempt + 1} failed with HTTP status {e.response.status_code}: {e}. Retrying...")
+                time.sleep(1)  # Delay before retrying
+            except (Timeout, ConnectionError) as e:
+                last_exception = e
+                print(f"Attempt {attempt + 1} failed: {e}. Retrying...")
+                time.sleep(1)  # Delay before retrying
             except RequestException as e:
-                print(f"Request failed: {e}. Retrying...")
-                time.sleep(1)
-        raise Exception("Failed after multiple retry attempts")
+                # For other kinds of request exceptions, raise immediately without retrying
+                print(f"RequestException encountered: {e}.")
+                raise e  # Re-raise the exception immediately
+        # If all retries are exhausted, raise the last encountered exception
+        raise last_exception if last_exception else Exception("Failed after multiple retry attempts")
 
     def get_price_history(self, symbol, periodType=None, period=None, frequencyType=None, frequency=None, needExtendedHoursData=None, needPreviousClose=None, startDate=None, endDate=None):
+        self.ensure_valid_token()
         url = f"{self.base_url}/marketdata/v1/pricehistory"
         params = {'symbol': symbol}
         
