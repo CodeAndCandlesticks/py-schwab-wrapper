@@ -2,6 +2,7 @@ import json
 import pytest
 import requests_mock
 from py_schwab_wrapper.schwab_api import SchwabAPI
+from requests.exceptions import HTTPError
 from datetime import datetime
 import pytz
 
@@ -185,3 +186,18 @@ def test_get_price_history_using_minimum_parameters(schwab_api):
             assert "low" in candle
             assert "volume" in candle
             assert "datetime" in candle
+
+def test_get_with_retry_unauthorized(schwab_api):
+    with requests_mock.Mocker() as m:
+        # Mock the GET request to always raise an HTTPError with a 401 status code
+        m.get(f"{schwab_api.base_url}/marketdata/v1/pricehistory", status_code=401)
+
+        # Use pytest.raises to assert that the correct exception is raised without retrying
+        with pytest.raises(HTTPError) as excinfo:
+            schwab_api.get_with_retry(
+                url=f"{schwab_api.base_url}/marketdata/v1/pricehistory",
+                params={"symbol": "QQQ"}
+            )
+
+        # Assert that the HTTPError has the correct status code
+        assert excinfo.value.response.status_code == 401

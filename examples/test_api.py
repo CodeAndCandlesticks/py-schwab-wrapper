@@ -37,6 +37,7 @@ def main():
     client_id = os.getenv('SCHWAB_CLIENT_ID')
     client_secret = os.getenv('SCHWAB_CLIENT_SECRET')
 
+
     # Enhanced environment variable check
     if not client_id or not client_secret:
         raise ValueError("SCHWAB_CLIENT_ID and SCHWAB_CLIENT_SECRET must be set as environment variables")
