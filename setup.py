@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="py_schwab_wrapper",  # This is the name that will be used for `pip install`
-    version="0.1.0",  # Update this with each release
+    version="0.1.1",  # Bugfix: 
     author="Luis Perez",
     author_email="luispe@gmail.com",
     description="A Python wrapper for Schwab API",
