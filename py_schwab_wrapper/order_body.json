@@ -1,0 +1,76 @@
+{
+  "session": "NORMAL", # options --> [ NORMAL, AM, PM, SEAMLESS ]
+  "duration": "DAY", # options --> [ DAY, GOOD_TILL_CANCEL, FILL_OR_KILL, IMMEDIATE_OR_CANCEL, END_OF_WEEK, END_OF_MONTH, NEXT_END_OF_MONTH, UNKNOWN ]
+  "orderType": "MARKET", # options --> [ MARKET, LIMIT, STOP, STOP_LIMIT, TRAILING_STOP, CABINET, NON_MARKETABLE, MARKET_ON_CLOSE, EXERCISE, TRAILING_STOP_LIMIT, NET_DEBIT, NET_CREDIT, NET_ZERO, LIMIT_ON_CLOSE, UNKNOWN ]
+  "cancelTime": "2024-09-03T19:37:40.706Z", # WTF?
+  "complexOrderStrategyType": "NONE", # options --> [ NONE, COVERED, VERTICAL, BACK_RATIO, CALENDAR, DIAGONAL, STRADDLE, STRANGLE, COLLAR_SYNTHETIC, BUTTERFLY, CONDOR, IRON_CONDOR, VERTICAL_ROLL, COLLAR_WITH_STOCK, DOUBLE_DIAGONAL, UNBALANCED_BUTTERFLY, UNBALANCED_CONDOR, UNBALANCED_IRON_CONDOR, UNBALANCED_VERTICAL_ROLL, MUTUAL_FUND_SWAP, CUSTOM ]
+  "quantity": 0,
+  "filledQuantity": 0,
+  "remainingQuantity": 0,
+  "destinationLinkName": "string",
+  "releaseTime": "2024-09-03T19:37:40.706Z",
+  "stopPrice": 0,
+  "stopPriceLinkBasis": "MANUAL",
+  "stopPriceLinkType": "VALUE",
+  "stopPriceOffset": 0,
+  "stopType": "STANDARD",
+  "priceLinkBasis": "MANUAL",
+  "priceLinkType": "VALUE",
+  "price": 0,
+  "taxLotMethod": "FIFO",
+  "orderLegCollection": [
+    {
+      "orderLegType": "EQUITY", # options --> [ EQUITY, OPTION, INDEX, MUTUAL_FUND, CASH_EQUIVALENT, FIXED_INCOME, CURRENCY, COLLECTIVE_INVESTMENT ]
+      "legId": 0,
+      "instrument": {
+        "cusip": "string",
+        "symbol": "string",
+        "description": "string",
+        "instrumentId": 0,
+        "netChange": 0,
+        "Type": "SWEEP_VEHICLE" # options depend on the account type: [ SWEEP_VEHICLE, SAVINGS, MONEY_MARKET_FUND, UNKNOWN ]
+      },
+      "instruction": "BUY", # options --> [ BUY, SELL, BUY_TO_COVER, SELL_SHORT, BUY_TO_OPEN, BUY_TO_CLOSE, SELL_TO_OPEN, SELL_TO_CLOSE, EXCHANGE, SELL_SHORT_EXEMPT ]
+      "positionEffect": "OPENING", # options --> [ OPENING, CLOSING, AUTOMATIC ]
+      "quantity": 0,
+      "quantityType": "ALL_SHARES", # options --> [ ALL_SHARES, DOLLARS, SHARES ]
+      "divCapGains": "REINVEST", # options -> [ REINVEST, PAYOUT ]
+      "toSymbol": "string"
+    }
+  ],
+  "activationPrice": 0,
+  "specialInstruction": "ALL_OR_NONE",
+  "orderStrategyType": "SINGLE", # Options --> [ SINGLE, CANCEL, RECALL, PAIR, FLATTEN, TWO_DAY_SWAP, BLAST_ALL, OCO, TRIGGER ]
+  "orderId": 0,
+  "cancelable": false,
+  "editable": false,
+  "status": "AWAITING_PARENT_ORDER",
+  "enteredTime": "2024-09-03T19:37:40.706Z",
+  "closeTime": "2024-09-03T19:37:40.706Z",
+  "accountNumber": 0,
+  "orderActivityCollection": [
+    {
+      "activityType": "EXECUTION",
+      "executionType": "FILL",
+      "quantity": 0,
+      "orderRemainingQuantity": 0,
+      "executionLegs": [
+        {
+          "legId": 0,
+          "price": 0,
+          "quantity": 0,
+          "mismarkedQuantity": 0,
+          "instrumentId": 0,
+          "time": "2024-09-03T19:37:40.706Z"
+        }
+      ]
+    }
+  ],
+  "replacingOrderCollection": [
+    "string"
+  ],
+  "childOrderStrategies": [
+    "string"
+  ],
+  "statusDescription": "string"
+}

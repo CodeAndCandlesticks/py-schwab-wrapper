@@ -21,7 +21,75 @@ def load_test_data(filename):
     with open(f"tests/test_data/{filename}", "r") as f:
         return json.load(f)
 
-def test_get_price_history_using_startDate_and_endDate_full_day(schwab_api):
+def test_get_price_history_camel_case_compatibility(schwab_api, recwarn):
+    # Load the mocked API response from a file
+    mock_response = load_test_data("QQQ-2024-08-26-5min.json")
+
+    eastern = pytz.timezone('America/New_York')
+
+    # Create a fixed date for August 23, 2024, in the Eastern Timezone
+    fixed_date = eastern.localize(datetime(2024, 8, 23))
+
+    # Set the start and end times (9:30 AM and 4:00 PM)
+    start_of_day = fixed_date.replace(hour=9, minute=30, second=0, microsecond=0)
+    end_of_day = fixed_date.replace(hour=16, minute=0, second=0, microsecond=0)
+
+    # Convert to milliseconds since epoch
+    start_date = int(start_of_day.timestamp() * 1000)
+    end_date = int(end_of_day.timestamp() * 1000)
+
+    with requests_mock.Mocker() as m:
+        # Mock the price history API endpoint
+        m.get(f"{schwab_api.base_url}/marketdata/v1/pricehistory", json=mock_response)
+
+        result = schwab_api.get_price_history(
+            symbol='QQQ', 
+            periodType='day',  # Deprecated camelCase
+            period=1, 
+            frequencyType='minute',  # Deprecated camelCase
+            frequency=5, 
+            needExtendedHoursData=False,  # Deprecated camelCase
+            needPreviousClose=True,  # Deprecated camelCase
+            startDate=start_date,  # Deprecated camelCase
+            endDate=end_date  # Deprecated camelCase
+        )
+        
+        # Verify the deprecation warnings were triggered
+        warnings = [str(w.message) for w in recwarn]
+        assert any("periodType" in w for w in warnings)
+        assert any("frequencyType" in w for w in warnings)
+        assert any("needExtendedHoursData" in w for w in warnings)
+        assert any("needPreviousClose" in w for w in warnings)
+        assert any("startDate" in w for w in warnings)
+        assert any("endDate" in w for w in warnings)
+
+        # Original assertions
+        assert "candles" in result
+        assert isinstance(result["candles"], list)
+        expected_candles_count = 78
+        assert len(result["candles"]) < expected_candles_count
+
+        assert "previousClose" in result
+        assert result["previousClose"] == 480.0
+
+        assert "previousCloseDate" in result
+        assert result["previousCloseDate"] == 1724389200000
+
+        assert "symbol" in result
+        assert result["symbol"] == "QQQ"
+
+        assert "empty" in result
+        assert result["empty"] is False
+
+        for candle in result["candles"]:
+            assert "open" in candle
+            assert "close" in candle
+            assert "high" in candle
+            assert "low" in candle
+            assert "volume" in candle
+            assert "datetime" in candle
+
+def test_get_price_history_using_start_date_and_end_date_full_day(schwab_api):
     # Load the mocked API response from a file
     mock_response = load_test_data("QQQ-2024-08-23-5min.json")
 
@@ -44,14 +112,14 @@ def test_get_price_history_using_startDate_and_endDate_full_day(schwab_api):
 
         result = schwab_api.get_price_history(
             symbol='QQQ', 
-            periodType='day', 
+            period_type='day', 
             period=1, 
-            frequencyType='minute', 
+            frequency_type='minute', 
             frequency=5, 
-            needExtendedHoursData=False, 
-            needPreviousClose=True, 
-            startDate=startDate, 
-            endDate=endDate
+            need_extended_hours_data=False, 
+            need_previous_close=True, 
+            start_date=startDate, 
+            end_date=endDate
         )
         
         # 1. Assert there's a candles array with exactly 78 candles (full day)
@@ -86,7 +154,7 @@ def test_get_price_history_using_startDate_and_endDate_full_day(schwab_api):
             assert "volume" in candle
             assert "datetime" in candle
 
-def test_get_price_history_using_startDate_and_endDate_partial_day(schwab_api):
+def test_get_price_history_using_start_date_and_end_date_partial_day(schwab_api):
     # Load the mocked API response from a file
     mock_response = load_test_data("QQQ-2024-08-26-5min.json")
 
@@ -109,14 +177,14 @@ def test_get_price_history_using_startDate_and_endDate_partial_day(schwab_api):
 
         result = schwab_api.get_price_history(
             symbol='QQQ', 
-            periodType='day', 
+            period_type='day', 
             period=1, 
-            frequencyType='minute', 
+            frequency_type='minute', 
             frequency=5, 
-            needExtendedHoursData=False, 
-            needPreviousClose=True, 
-            startDate=startDate, 
-            endDate=endDate
+            need_extended_hours_data=False, 
+            need_previous_close=True, 
+            start_date=startDate, 
+            end_date=endDate
         )
         
         # 1. Assert there's a candles array with less than 78 candles
@@ -149,6 +217,7 @@ def test_get_price_history_using_startDate_and_endDate_partial_day(schwab_api):
             assert "low" in candle
             assert "volume" in candle
             assert "datetime" in candle
+
 
 def test_get_price_history_using_minimum_parameters(schwab_api):
     # Load the mocked API response from a file

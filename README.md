@@ -66,10 +66,10 @@ token.json
 
 ## Example API Usage
 
-Once authenticated, you can use the wrapper to fetch price history data a version of this implementation is also available in examples/test_api.py:
+Once authenticated, you can use the wrapper to get historical market data, get account information, or place an order. Be sure to check out our examples/ folder.
 
 ```python
-from py_schwab_wrapper import SchwabAPI
+from py_schwab_wrapper.schwab_api import SchwabAPI
 from datetime import datetime, timedelta
 
 # Initialize the API wrapper with your credentials
@@ -79,20 +79,20 @@ schwab_api = SchwabAPI(client_id="<your_client_id>", client_secret="<your_client
 now = datetime.now()
 start_of_day = now.replace(hour=9, minute=30, second=0, microsecond=0)
 end_of_day = now.replace(hour=16, minute=0, second=0, microsecond=0)
-startDate = int(start_of_day.timestamp() * 1000)
-endDate = int(end_of_day.timestamp() * 1000)
+start_date = int(start_of_day.timestamp() * 1000)
+end_date = int(end_of_day.timestamp() * 1000)
 
 # Fetch price history
 price_history = schwab_api.get_price_history(
     symbol='QQQ', 
-    periodType='day', 
+    period_type='day', 
     period=1, 
-    frequencyType='minute', 
+    frequency_type='minute', 
     frequency=5, 
-    needExtendedHoursData=False, 
-    needPreviousClose=True, 
-    startDate=startDate, 
-    endDate=endDate
+    need_extended_hours_data=False, 
+    need_previous_close=True, 
+    start_date=start_date, 
+    end_date=end_date
 )
 
 print(price_history)
