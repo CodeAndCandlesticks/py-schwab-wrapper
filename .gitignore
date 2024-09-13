@@ -170,3 +170,4 @@ key.pem
 
 # Ignore token.json file
 token.json
+*.json
