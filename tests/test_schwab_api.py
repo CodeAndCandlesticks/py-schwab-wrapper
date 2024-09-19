@@ -7,8 +7,17 @@ from datetime import datetime
 import pytz
 
 @pytest.fixture
-def schwab_api(monkeypatch):
-    # Mock the token to simulate a valid token
+def schwab_api(monkeypatch, requests_mock):
+    # Mock the token refresh POST request
+    requests_mock.post(
+        "https://api.schwabapi.com/v1/oauth/token",
+        json={
+            "access_token": "mock_access_token",
+            "expires_in": 3600,
+            "token_type": "Bearer"
+        }
+    )
+    
     def mock_load_token():
         return load_test_data("sample_token.json")
     
@@ -20,6 +29,19 @@ def load_test_data(filename):
     # Helper function to load JSON files from the test_data folder
     with open(f"tests/test_data/{filename}", "r") as f:
         return json.load(f)
+
+def mock_price_history(m, api_url, mock_response):
+    m.get(f"{api_url}/marketdata/v1/pricehistory", json=mock_response)
+
+def assert_valid_candles(candles):
+    for candle in candles:
+        assert "open" in candle
+        assert "close" in candle
+        assert "high" in candle
+        assert "low" in candle
+        assert "volume" in candle
+        assert "datetime" in candle
+
 
 def test_get_price_history_camel_case_compatibility(schwab_api, recwarn):
     # Load the mocked API response from a file
@@ -40,7 +62,7 @@ def test_get_price_history_camel_case_compatibility(schwab_api, recwarn):
 
     with requests_mock.Mocker() as m:
         # Mock the price history API endpoint
-        m.get(f"{schwab_api.base_url}/marketdata/v1/pricehistory", json=mock_response)
+        mock_price_history(m, schwab_api.base_url, mock_response)
 
         result = schwab_api.get_price_history(
             symbol='QQQ', 
@@ -108,7 +130,7 @@ def test_get_price_history_using_start_date_and_end_date_full_day(schwab_api):
 
     with requests_mock.Mocker() as m:
         # Mock the price history API endpoint
-        m.get(f"{schwab_api.base_url}/marketdata/v1/pricehistory", json=mock_response)
+        mock_price_history(m, schwab_api.base_url, mock_response)
 
         result = schwab_api.get_price_history(
             symbol='QQQ', 
@@ -146,13 +168,8 @@ def test_get_price_history_using_start_date_and_end_date_full_day(schwab_api):
         assert result["empty"] is False
 
         # 6. Assert that each candle has the required fields
-        for candle in result["candles"]:
-            assert "open" in candle
-            assert "close" in candle
-            assert "high" in candle
-            assert "low" in candle
-            assert "volume" in candle
-            assert "datetime" in candle
+        assert_valid_candles(result["candles"])
+
 
 def test_get_price_history_using_start_date_and_end_date_partial_day(schwab_api):
     # Load the mocked API response from a file
@@ -173,7 +190,7 @@ def test_get_price_history_using_start_date_and_end_date_partial_day(schwab_api)
 
     with requests_mock.Mocker() as m:
         # Mock the price history API endpoint
-        m.get(f"{schwab_api.base_url}/marketdata/v1/pricehistory", json=mock_response)
+        mock_price_history(m, schwab_api.base_url, mock_response)
 
         result = schwab_api.get_price_history(
             symbol='QQQ', 
@@ -210,13 +227,7 @@ def test_get_price_history_using_start_date_and_end_date_partial_day(schwab_api)
         assert result["empty"] is False
 
         # 6. Assert that each candle has the required fields
-        for candle in result["candles"]:
-            assert "open" in candle
-            assert "close" in candle
-            assert "high" in candle
-            assert "low" in candle
-            assert "volume" in candle
-            assert "datetime" in candle
+        assert_valid_candles(result["candles"])
 
 
 def test_get_price_history_using_minimum_parameters(schwab_api):
@@ -226,7 +237,7 @@ def test_get_price_history_using_minimum_parameters(schwab_api):
     
     with requests_mock.Mocker() as m:
         # Mock the price history API endpoint
-        m.get(f"{schwab_api.base_url}/marketdata/v1/pricehistory", json=mock_response)
+        mock_price_history(m, schwab_api.base_url, mock_response)
 
         result = schwab_api.get_price_history(
             symbol='QQQ'
@@ -248,13 +259,7 @@ def test_get_price_history_using_minimum_parameters(schwab_api):
         assert result["empty"] is False
 
         # 4. Assert that each candle has the required fields
-        for candle in result["candles"]:
-            assert "open" in candle
-            assert "close" in candle
-            assert "high" in candle
-            assert "low" in candle
-            assert "volume" in candle
-            assert "datetime" in candle
+        assert_valid_candles(result["candles"])
 
 def test_get_with_retry_unauthorized(schwab_api):
     with requests_mock.Mocker() as m:

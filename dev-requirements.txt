@@ -8,3 +8,4 @@ requests-mock
 setuptools
 wheel
 twine
+pytest-cov
