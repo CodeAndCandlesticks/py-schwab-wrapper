@@ -1,9 +1,0 @@
-{
-    "expires_in": 1800,
-    "token_type": "Bearer",
-    "scope": "api",
-    "refresh_token": "sample_refresh_token",
-    "access_token": "sample_access_token",
-    "id_token": "sample_id_token",
-    "expires_at": 1724296222.476014
-}

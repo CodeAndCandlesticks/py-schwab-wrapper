@@ -61,10 +61,11 @@ def main():
 
     try:
         # Retrieve account numbers
-        account_numbers = schwab_api.get_account_numbers()
+        account_numbers_response = schwab_api.get_account_numbers()
+        print (account_numbers_response)
 
         # Display account numbers on the screen
-        display_account_numbers(account_numbers)
+        display_account_numbers(account_numbers_response)
 
     except Exception as e:
         print(f"An error occurred while retrieving account numbers: {e}")

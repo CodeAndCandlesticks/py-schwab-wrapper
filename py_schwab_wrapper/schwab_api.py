@@ -199,7 +199,6 @@ class SchwabAPI:
             warnings.warn("The 'endDate' parameter is deprecated, use 'end_date' instead.", DeprecationWarning)
             end_date = endDate
         
-
         self.ensure_valid_token()
         url = f"{self.base_url}/marketdata/v1/pricehistory"
         params = {'symbol': symbol}
@@ -313,8 +312,6 @@ class SchwabAPI:
             print("Response did not contain JSON, returning raw text.")
             return response.text
 
-
-
     def place_single_order(self, account_hash, order_type, quantity, symbol, price=None, duration="DAY", session="NORMAL", instruction="BUY", **kwargs):
         """
         Place a single market or limit order without stop loss or profit target.
@@ -329,6 +326,9 @@ class SchwabAPI:
         :param action: The action to take (e.g., 'BUY', 'SELL'). Default is 'BUY'.
         :return: The API response as a JSON object.
         """
+        if order_type == "LIMIT" and price is None:
+            raise ValueError("Price must be provided for LIMIT orders.")
+        
         self.ensure_valid_token()
 
         # Construct the single order payload
@@ -364,7 +364,7 @@ class SchwabAPI:
 
 
     def place_first_triggers_oco_order(self, account_hash, order_type, quantity, symbol, price=None, stop_loss=None, 
-                                    profit_target=None, duration="DAY", session="NORMAL", **kwargs):
+                                    profit_target=None, duration="DAY", session="NORMAL",  instruction="BUY", **kwargs):
         """
         Place a First Triggers OCO (One-Cancels-the-Other) order with stop loss and profit target.
         
@@ -380,11 +380,14 @@ class SchwabAPI:
         :return: The API response as a JSON object.
         """
         self.ensure_valid_token()
-
+        if stop_loss is None and profit_target is None:
+            raise ValueError("Must provide either stop loss or profit target.")
+        
         # Construct the First Triggers OCO order payload
         order_payload = {
             "session": session,
             "duration": duration,
+            "orderType": order_type,
             "orderStrategyType": "TRIGGER",
             "orderLegCollection": [
                 {
@@ -393,8 +396,9 @@ class SchwabAPI:
                         "symbol": symbol,
                         "type": "EQUITY"
                     },
-                    "instruction": "SELL",
+                    "instruction": instruction,  # Use the action parameter to determine 'BUY' or 'SELL'
                     "quantity": quantity,
+                    "quantityType": "SHARES",
                     "price": price
                 }
             ],
@@ -404,7 +408,7 @@ class SchwabAPI:
         # Add stop loss order
         if stop_loss:
             stop_loss_order = {
-                "orderType": "STOP",
+                "orderType": "STOP_LIMIT",
                 "stopPrice": stop_loss,
                 "session": session,
                 "duration": duration,
@@ -415,7 +419,7 @@ class SchwabAPI:
                             "symbol": symbol,
                             "type": "EQUITY"
                         },
-                        "instruction": "SELL",
+                        "instruction": "SELL",  # Use the action parameter to determine 'BUY' or 'SELL' dynamically
                         "quantity": quantity
                     }
                 ]
@@ -436,7 +440,7 @@ class SchwabAPI:
                             "symbol": symbol,
                             "type": "EQUITY"
                         },
-                        "instruction": "SELL",
+                        "instruction": "SELL",  # Use the action parameter to determine 'BUY' or 'SELL' dynamically
                         "quantity": quantity
                     }
                 ]
