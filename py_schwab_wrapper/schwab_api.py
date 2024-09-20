@@ -298,6 +298,10 @@ class SchwabAPI:
         # Build URL
         url = f"{self.base_url}/trader/v1/accounts/{account_hash}/orders"
 
+        # Log the payload being sent
+        print("POSTing order to URL:", url)
+        print("Order payload being sent:", json.dumps(order_payload, indent=4))
+
         # Use the session's post method without retries
         response = self.session.post(url, json=order_payload)
         response.raise_for_status()
@@ -363,15 +367,16 @@ class SchwabAPI:
         return self.post_order(account_hash, order_payload)
 
 
-    def place_first_triggers_oco_order(self, account_hash, order_type, quantity, symbol, price=None, stop_loss=None, 
-                                    profit_target=None, duration="DAY", session="NORMAL",  instruction="BUY", **kwargs):
+    def place_first_triggers_oco_order(self, account_hash, order_type, quantity, symbol, instruction, price=None, 
+                                    stop_loss=None, profit_target=None, duration="DAY", session="NORMAL", **kwargs):
         """
         Place a First Triggers OCO (One-Cancels-the-Other) order with stop loss and profit target.
-        
+
         :param account_hash: The hashed account identifier.
         :param order_type: The type of the initial order (e.g., 'MARKET', 'LIMIT').
         :param quantity: The number of shares to buy/sell.
         :param symbol: The symbol of the security to trade.
+        :param instruction: The instruction value (e.g., 'BUY', 'SELL_SHORT', 'SELL').
         :param price: The price at which to execute the primary order (used for LIMIT orders).
         :param stop_loss: The stop loss price.
         :param profit_target: The profit target price.
@@ -380,8 +385,11 @@ class SchwabAPI:
         :return: The API response as a JSON object.
         """
         self.ensure_valid_token()
-        if stop_loss is None and profit_target is None:
-            raise ValueError("Must provide either stop loss or profit target.")
+        #if stop_loss is None and profit_target is None:
+        #    raise ValueError("Must provide either stop loss or profit target.")
+
+        # Invert the instruction for stop loss and profit target
+        inverse_instruction = "SELL" if instruction == "BUY" else "BUY"
         
         # Construct the First Triggers OCO order payload
         order_payload = {
@@ -389,6 +397,8 @@ class SchwabAPI:
             "duration": duration,
             "orderType": order_type,
             "orderStrategyType": "TRIGGER",
+            # "complexOrderStrategyType": "NONE",  # Optional but added for completeness
+            # "specialInstruction": "ALL_OR_NONE",  # Optional but can be useful
             "orderLegCollection": [
                 {
                     "orderLegType": "EQUITY",
@@ -396,22 +406,26 @@ class SchwabAPI:
                         "symbol": symbol,
                         "type": "EQUITY"
                     },
-                    "instruction": instruction,  # Use the action parameter to determine 'BUY' or 'SELL'
+                    "instruction": instruction,  # Main instruction (e.g., 'BUY', 'SELL_SHORT')
+                    "positionEffect": "AUTOMATIC", # Main should open the position
                     "quantity": quantity,
-                    "quantityType": "SHARES",
-                    "price": price
+                    "quantityType": "SHARES"
                 }
             ],
+            "price": price if order_type == "LIMIT" else None,  # Only include price for LIMIT orders
             "childOrderStrategies": []
         }
 
-        # Add stop loss order
+    # Add stop loss order with inverse instruction
         if stop_loss:
             stop_loss_order = {
-                "orderType": "STOP_LIMIT",
+                "orderType": "STOP",
                 "stopPrice": stop_loss,
+                "stopType": "STANDARD",  # Default stop type based on documentation
                 "session": session,
                 "duration": duration,
+                # "stopPriceLinkBasis": "MANUAL",  # Based on documentation
+                # "stopPriceLinkType": "VALUE",  # Type of stop price linkage
                 "orderLegCollection": [
                     {
                         "orderLegType": "EQUITY",
@@ -419,20 +433,24 @@ class SchwabAPI:
                             "symbol": symbol,
                             "type": "EQUITY"
                         },
-                        "instruction": "SELL",  # Use the action parameter to determine 'BUY' or 'SELL' dynamically
-                        "quantity": quantity
+                        "instruction": inverse_instruction,  # Inverted instruction for stop loss
+                        "quantity": quantity,
+                        "quantityType": "SHARES",
+                        "positionEffect": "AUTOMATIC"  # Stop loss closes the position
                     }
                 ]
             }
             order_payload["childOrderStrategies"].append(stop_loss_order)
 
-        # Add profit target order
+        # Add profit target order with inverse instruction
         if profit_target:
             profit_target_order = {
                 "orderType": "LIMIT",
                 "price": profit_target,
                 "session": session,
                 "duration": duration,
+                # "priceLinkBasis": "MANUAL",  # Based on documentation
+                # "priceLinkType": "VALUE",  # Type of price linkage
                 "orderLegCollection": [
                     {
                         "orderLegType": "EQUITY",
@@ -440,14 +458,16 @@ class SchwabAPI:
                             "symbol": symbol,
                             "type": "EQUITY"
                         },
-                        "instruction": "SELL",  # Use the action parameter to determine 'BUY' or 'SELL' dynamically
-                        "quantity": quantity
+                        "instruction": inverse_instruction,  # Inverted instruction for profit target
+                        "quantity": quantity,
+                        "quantityType": "SHARES",
+                        "positionEffect": "AUTOMATIC"  # Profit target closes the position
                     }
                 ]
             }
             order_payload["childOrderStrategies"].append(profit_target_order)
 
-        # Add additional kwargs
+        # Add additional kwargs (e.g., taxLotMethod)
         order_payload.update(kwargs)
 
         # Send the order
