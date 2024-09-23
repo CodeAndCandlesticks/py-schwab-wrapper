@@ -4,10 +4,9 @@ import time
 import json
 from requests.exceptions import RequestException, HTTPError, Timeout, ConnectionError
 import base64
-from datetime import datetime
+from datetime import datetime, timezone
 import requests
 import warnings
-from datetime import datetime, timedelta
 import pytz
 from requests.exceptions import HTTPError
 
@@ -349,8 +348,7 @@ class SchwabAPI:
                     },
                     "instruction": instruction,  # Use the action parameter to determine 'BUY' or 'SELL'
                     "positionEffect": "AUTOMATIC",
-                    "quantity": quantity,
-                    "quantityType": "SHARES"
+                    "quantity": quantity
                 }
             ],
             "orderStrategyType": "SINGLE"
@@ -368,7 +366,8 @@ class SchwabAPI:
 
 
     def place_first_triggers_oco_order(self, account_hash, order_type, quantity, symbol, instruction, price=None, 
-                                    stop_loss=None, profit_target=None, duration="DAY", session="NORMAL", **kwargs):
+                                    stop_loss=None, profit_target=None, duration="DAY", session="NORMAL", asset_type="EQUITY",
+                                    **kwargs):
         """
         Place a First Triggers OCO (One-Cancels-the-Other) order with stop loss and profit target.
 
@@ -376,96 +375,83 @@ class SchwabAPI:
         :param order_type: The type of the initial order (e.g., 'MARKET', 'LIMIT').
         :param quantity: The number of shares to buy/sell.
         :param symbol: The symbol of the security to trade.
-        :param instruction: The instruction value (e.g., 'BUY', 'SELL_SHORT', 'SELL').
+        :param instruction: The main instruction value (e.g., 'BUY', 'SELL_SHORT').
         :param price: The price at which to execute the primary order (used for LIMIT orders).
         :param stop_loss: The stop loss price.
         :param profit_target: The profit target price.
         :param duration: The duration the order should remain active (default is 'DAY').
         :param session: The session in which the order should be placed (default is 'NORMAL').
+        :param asset_type: The type of asset to trade 'EQUITY' or 'OPTION' (default is 'EQUITY')
         :return: The API response as a JSON object.
         """
         self.ensure_valid_token()
-        #if stop_loss is None and profit_target is None:
-        #    raise ValueError("Must provide either stop loss or profit target.")
+        if stop_loss is None or profit_target is None:
+            raise ValueError("Must provide both stop loss AND profit target for OCO")
+
 
         # Invert the instruction for stop loss and profit target
-        inverse_instruction = "SELL" if instruction == "BUY" else "BUY"
-        
+        inverse_instruction = "SELL" if instruction == "BUY" else "BUY_TO_COVER"
+
         # Construct the First Triggers OCO order payload
         order_payload = {
+            "orderStrategyType": "TRIGGER",
             "session": session,
             "duration": duration,
             "orderType": order_type,
-            "orderStrategyType": "TRIGGER",
-            # "complexOrderStrategyType": "NONE",  # Optional but added for completeness
-            # "specialInstruction": "ALL_OR_NONE",  # Optional but can be useful
+            "price": price if order_type == "LIMIT" else None,  # Only include price for LIMIT orders
             "orderLegCollection": [
                 {
-                    "orderLegType": "EQUITY",
-                    "instrument": {
-                        "symbol": symbol,
-                        "type": "EQUITY"
-                    },
-                    "instruction": instruction,  # Main instruction (e.g., 'BUY', 'SELL_SHORT')
-                    "positionEffect": "AUTOMATIC", # Main should open the position
+                    "instruction": instruction,
                     "quantity": quantity,
-                    "quantityType": "SHARES"
+                    "instrument": {
+                        "assetType": asset_type,
+                        "symbol": symbol
+                    }
                 }
             ],
-            "price": price if order_type == "LIMIT" else None,  # Only include price for LIMIT orders
-            "childOrderStrategies": []
+            "childOrderStrategies": [
+                {
+                    "orderStrategyType": "OCO",
+                    "childOrderStrategies": [
+                        {
+                            "orderStrategyType": "SINGLE",
+                            "session": session,
+                            "duration": duration,
+                            "orderType": "STOP",
+                            "stopPrice": stop_loss,
+                            "orderLegCollection": [
+                                {
+                                    "instruction": inverse_instruction,
+                                    "quantity": quantity,
+                                    "orderLegType": "EQUITY",
+                                    "instrument": {
+                                        "assetType": asset_type,
+                                        "symbol": symbol
+                                    }
+                                }
+                            ],
+                        },
+                        {
+                            "orderStrategyType": "SINGLE",
+                            "session": session,
+                            "duration": duration,
+                            "orderType": "LIMIT",
+                            "price": profit_target,
+                            "orderLegCollection": [
+                                {
+                                    "instruction": inverse_instruction,
+                                    "quantity": quantity,
+                                    "instrument": {
+                                        "assetType": asset_type,
+                                        "symbol": symbol
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
-
-    # Add stop loss order with inverse instruction
-        if stop_loss:
-            stop_loss_order = {
-                "orderType": "STOP",
-                "stopPrice": stop_loss,
-                "stopType": "STANDARD",  # Default stop type based on documentation
-                "session": session,
-                "duration": duration,
-                # "stopPriceLinkBasis": "MANUAL",  # Based on documentation
-                # "stopPriceLinkType": "VALUE",  # Type of stop price linkage
-                "orderLegCollection": [
-                    {
-                        "orderLegType": "EQUITY",
-                        "instrument": {
-                            "symbol": symbol,
-                            "type": "EQUITY"
-                        },
-                        "instruction": inverse_instruction,  # Inverted instruction for stop loss
-                        "quantity": quantity,
-                        "quantityType": "SHARES",
-                        "positionEffect": "AUTOMATIC"  # Stop loss closes the position
-                    }
-                ]
-            }
-            order_payload["childOrderStrategies"].append(stop_loss_order)
-
-        # Add profit target order with inverse instruction
-        if profit_target:
-            profit_target_order = {
-                "orderType": "LIMIT",
-                "price": profit_target,
-                "session": session,
-                "duration": duration,
-                # "priceLinkBasis": "MANUAL",  # Based on documentation
-                # "priceLinkType": "VALUE",  # Type of price linkage
-                "orderLegCollection": [
-                    {
-                        "orderLegType": "EQUITY",
-                        "instrument": {
-                            "symbol": symbol,
-                            "type": "EQUITY"
-                        },
-                        "instruction": inverse_instruction,  # Inverted instruction for profit target
-                        "quantity": quantity,
-                        "quantityType": "SHARES",
-                        "positionEffect": "AUTOMATIC"  # Profit target closes the position
-                    }
-                ]
-            }
-            order_payload["childOrderStrategies"].append(profit_target_order)
 
         # Add additional kwargs (e.g., taxLotMethod)
         order_payload.update(kwargs)

@@ -28,7 +28,7 @@ try:
         order_type='LIMIT',
         quantity=1,
         symbol='QQQ',
-        price=470,
+        price=500,
         duration='DAY', # OR GOOD_TILL_CANCEL
         session='NORMAL',
         instruction= 'SELL_SHORT' # OR BUY

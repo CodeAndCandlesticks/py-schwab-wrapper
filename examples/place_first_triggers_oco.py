@@ -27,14 +27,14 @@ try:
     # Attempt to place a Market order to buy 1 QQQ and trigger an OCO
     response = schwab_api.place_first_triggers_oco_order(
         account_hash=account_hash,
-        order_type="LIMIT",
-        price=70.00,  # Changed to float
-        quantity=1,
-        symbol="GEHC",
+        order_type='LIMIT',
+        price=490.00,  # Changed to float
+        quantity=1.0,
+        symbol='QQQ',
         duration='DAY',  # Can also be 'GOOD_TILL_CANCEL'
-        instruction='BUY',  # Can also be 'SELL_SHORT'
-        stop_loss=50.00,
-        profit_target=100.00
+        instruction='SELL_SHORT',  # Can also be 'SELL_SHORT'
+        stop_loss=491.00,
+        profit_target=480.00
     )
 
     # Handle the response
