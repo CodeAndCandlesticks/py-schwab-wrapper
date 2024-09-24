@@ -1,6 +1,9 @@
 import json
 import pytest
 import requests_mock
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from py_schwab_wrapper.schwab_api import SchwabAPI
 from requests.exceptions import HTTPError
 from datetime import datetime
@@ -337,22 +340,21 @@ def test_get_orders(schwab_api, requests_mock):
 
     # Assertions based on the sample data
     assert isinstance(result, list)  # Ensure result is a list
-    assert len(result) == 10  # Ensure there are 7 orders in the response
+    assert len(result) == 23  # Ensure there are 23 orders in the response
 
     # Example assertions for the first order
     first_order = result[0]
     assert first_order['session'] == "NORMAL"
     assert first_order['duration'] == "DAY"
-    assert first_order['orderType'] == "NET_DEBIT"
-    assert first_order['status'] == "CANCELED"
-    assert first_order['quantity'] == 6.0
-    assert first_order['filledQuantity'] == 0.0
+    assert first_order['orderType'] == "LIMIT"
+    assert first_order['status'] == "FILLED"
+    assert first_order['quantity'] == 1.0
+    assert first_order['filledQuantity'] == 1.0
 
     # Ensure the orderLegCollection exists and contains the correct structure
     assert "orderLegCollection" in first_order
-    assert len(first_order["orderLegCollection"]) == 2
-    assert first_order["orderLegCollection"][0]["instruction"] == "BUY_TO_CLOSE"
-    assert first_order["orderLegCollection"][1]["instruction"] == "SELL_TO_CLOSE"
+    assert len(first_order["orderLegCollection"]) == 1
+    assert first_order["orderLegCollection"][0]["instruction"] == "SELL_TO_CLOSE"
 
 def test_post_order_success(schwab_api, requests_mock):
     # Mock the API POST request for a successful order placement
@@ -502,58 +504,65 @@ def test_place_oco_order_with_stop_loss_and_profit_target(schwab_api, requests_m
     # Call the method with both stop loss and profit target
     result = schwab_api.place_first_triggers_oco_order(
         account_hash=account_hash,
-        order_type="LIMIT",
-        quantity=10,
-        symbol="AAPL",
-        price=150.00,
-        stop_loss=140.00,
-        profit_target=160.00
+        order_type='LIMIT',
+        price=490,
+        quantity=1.0,
+        symbol='QQQ',
+        duration='DAY',  # Can also be 'GOOD_TILL_CANCEL'
+        instruction='SELL_SHORT',  # Can also be 'BUY'
+        stop_loss=491.00,
+        profit_target=480.00
     )
 
     # Assert that the result is None (since the status code is 201 and there is no content)
     assert result is None
 
-def test_place_oco_order_with_only_stop_loss(schwab_api, requests_mock):
-    # Mock a successful post response for an OCO order with only stop loss
+def test_place_oco_order_with_no_stop_loss_or_profit_target(schwab_api):
+    # Test placing an OCO order without stop loss or profit target
     account_hash = "sample_account_hash"
-    url = f"{schwab_api.base_url}/trader/v1/accounts/{account_hash}/orders"
     
-    # Mock a successful response with status 201
-    requests_mock.post(url, status_code=201)
+    # Expect a ValueError or similar behavior if stop loss and profit target are both missing
+    with pytest.raises(ValueError, match="Must provide both stop loss AND profit target for OCO"):
+        schwab_api.place_first_triggers_oco_order(
+            account_hash=account_hash,
+            order_type="LIMIT",
+            quantity=10,
+            symbol="AAPL",
+            instruction="BUY",
+            price=150.00
+        )
 
-    # Call the method with only stop loss
-    result = schwab_api.place_first_triggers_oco_order(
-        account_hash=account_hash,
-        order_type="LIMIT",
-        quantity=10,
-        symbol="AAPL",
-        price=150.00,
-        stop_loss=140.00
-    )
-
-    # Assert that the result is None (since the status code is 201 and there is no content)
-    assert result is None
-
-def test_place_oco_order_with_only_profit_target(schwab_api, requests_mock):
-    # Mock a successful post response for an OCO order with only profit target
+def test_place_oco_order_with_only_stop_loss(schwab_api):
+    # Test placing an OCO order without stop loss or profit target
     account_hash = "sample_account_hash"
-    url = f"{schwab_api.base_url}/trader/v1/accounts/{account_hash}/orders"
     
-    # Mock a successful response with status 201
-    requests_mock.post(url, status_code=201)
+    # Expect a ValueError or similar behavior if stop loss and profit target are both missing
+    with pytest.raises(ValueError, match="Must provide both stop loss AND profit target for OCO"):
+        schwab_api.place_first_triggers_oco_order(
+            account_hash=account_hash,
+            order_type="LIMIT",
+            quantity=10,
+            symbol="AAPL",
+            instruction="BUY",
+            price=150.00,
+            stop_loss=140.00
+        )
 
-    # Call the method with only profit target
-    result = schwab_api.place_first_triggers_oco_order(
-        account_hash=account_hash,
-        order_type="LIMIT",
-        quantity=10,
-        symbol="AAPL",
-        price=150.00,
-        profit_target=160.00
-    )
-
-    # Assert that the result is None (since the status code is 201 and there is no content)
-    assert result is None
+def test_place_oco_order_with_only_profit_target(schwab_api):
+    # Test placing an OCO order without stop loss or profit target
+    account_hash = "sample_account_hash"
+    
+    # Expect a ValueError or similar behavior if stop loss and profit target are both missing
+    with pytest.raises(ValueError, match="Must provide both stop loss AND profit target for OCO"):
+        schwab_api.place_first_triggers_oco_order(
+            account_hash=account_hash,
+            order_type="LIMIT",
+            quantity=10,
+            symbol="AAPL",
+            instruction="BUY",
+            price=150.00,
+            profit_target=160.00
+        )
 
 def test_place_market_oco_order(schwab_api, requests_mock):
     # Mock a successful post response for a market order
@@ -566,11 +575,13 @@ def test_place_market_oco_order(schwab_api, requests_mock):
     # Call the method with MARKET as the order type
     result = schwab_api.place_first_triggers_oco_order(
         account_hash=account_hash,
-        order_type="MARKET",
-        quantity=10,
-        symbol="AAPL",
-        stop_loss=140.00,
-        profit_target=160.00
+        order_type='MARKET',
+        quantity=1.0,
+        symbol='QQQ',
+        duration='DAY',  # Can also be 'GOOD_TILL_CANCEL'
+        instruction='SELL_SHORT',  # Can also be 'BUY'
+        stop_loss=491.00,
+        profit_target=480.00
     )
 
     # Assert that the result is None (since the status code is 201 and there is no content)
@@ -591,6 +602,7 @@ def test_place_oco_order_with_additional_params(schwab_api, requests_mock):
         quantity=10,
         symbol="AAPL",
         price=150.00,
+        instruction='BUY',
         stop_loss=140.00,
         profit_target=160.00,
         trailType="PERCENT"  # Additional param
@@ -614,21 +626,8 @@ def test_place_oco_order_error(schwab_api, requests_mock):
             order_type="LIMIT",
             quantity=10,
             symbol="AAPL",
+            instruction='BUY',
             price=150.00,
             stop_loss=140.00,
             profit_target=160.00
-        )
-
-def test_place_oco_order_with_no_stop_loss_or_profit_target(schwab_api):
-    # Test placing an OCO order without stop loss or profit target
-    account_hash = "sample_account_hash"
-    
-    # Expect a ValueError or similar behavior if stop loss and profit target are both missing
-    with pytest.raises(ValueError, match="Must provide either stop loss or profit target"):
-        schwab_api.place_first_triggers_oco_order(
-            account_hash=account_hash,
-            order_type="LIMIT",
-            quantity=10,
-            symbol="AAPL",
-            price=150.00
         )

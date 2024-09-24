@@ -29,10 +29,10 @@ try:
         account_hash=account_hash,
         order_type='LIMIT',
         price=490.00,  # Changed to float
-        quantity=1.0,
+        quantity=1,
         symbol='QQQ',
         duration='DAY',  # Can also be 'GOOD_TILL_CANCEL'
-        instruction='SELL_SHORT',  # Can also be 'SELL_SHORT'
+        instruction='SELL_SHORT',  # Can also be 'BUY'
         stop_loss=491.00,
         profit_target=480.00
     )
