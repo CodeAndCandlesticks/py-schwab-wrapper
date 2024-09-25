@@ -4,9 +4,13 @@
 
 ## Features
 
+Be sure to check out our CHANGELOG for full details on functionality
+
 - OAuth2 authentication and token refresh.
 - Fetch historical price data for a symbol.
-- Extensible for other Schwab API functionalities.
+- Get account information
+- Get orders for a specific account
+- Place orders with user friendly abstractions.
 
 ## Installation
 
