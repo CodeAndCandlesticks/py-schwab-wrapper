@@ -1,0 +1,1575 @@
+[
+    {
+        "session": "NORMAL",
+        "duration": "DAY",
+        "orderType": "LIMIT",
+        "complexOrderStrategyType": "NONE",
+        "quantity": 1.0,
+        "filledQuantity": 1.0,
+        "remainingQuantity": 0.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "DFIN",
+        "price": 1.05,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0SPXW.UO45720000",
+                    "symbol": "SPXW  240924P05720000",
+                    "description": "S & P 500 INDEX 09/24/2024 $5720 Put",
+                    "instrumentId": 223094200,
+                    "type": "VANILLA",
+                    "putCall": "PUT",
+                    "underlyingSymbol": "SPXW",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "$SPX",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001688465282,
+        "cancelable": false,
+        "editable": false,
+        "status": "FILLED",
+        "enteredTime": "2024-09-24T18:57:53+0000",
+        "closeTime": "2024-09-24T18:58:03+0000",
+        "tag": "API_TOS:AT_LADDER_AS",
+        "accountNumber": "account_number",
+        "orderActivityCollection": [
+            {
+                "activityType": "EXECUTION",
+                "activityId": 86340339190,
+                "executionType": "FILL",
+                "quantity": 1.0,
+                "orderRemainingQuantity": 0.0,
+                "executionLegs": [
+                    {
+                        "legId": 1,
+                        "quantity": 1.0,
+                        "mismarkedQuantity": 0.0,
+                        "price": 1.05,
+                        "time": "2024-09-24T18:58:03+0000",
+                        "instrumentId": 223094200
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "session": "NORMAL",
+        "duration": "DAY",
+        "orderType": "LIMIT",
+        "complexOrderStrategyType": "NONE",
+        "quantity": 1.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 1.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "CDRG",
+        "price": 1.15,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0QQQ..UP40487000",
+                    "symbol": "QQQ   240925P00487000",
+                    "description": "INVESCO QQQ TR 09/25/2024 $487 Put",
+                    "instrumentId": 223459794,
+                    "type": "VANILLA",
+                    "putCall": "PUT",
+                    "underlyingSymbol": "QQQ",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "QQQ",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "BUY_TO_OPEN",
+                "positionEffect": "OPENING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "TRIGGER",
+        "orderId": 1001694324189,
+        "cancelable": true,
+        "editable": false,
+        "status": "WORKING",
+        "enteredTime": "2024-09-25T14:08:32+0000",
+        "tag": "API_TOS:AT_LADDER_AS",
+        "accountNumber": "account_number",
+        "childOrderStrategies": [
+            {
+                "orderStrategyType": "OCO",
+                "orderId": 1001694324190,
+                "cancelable": true,
+                "editable": false,
+                "status": "AWAITING_PARENT_ORDER",
+                "enteredTime": "2024-09-25T14:08:32+0000",
+                "accountNumber": "account_number",
+                "childOrderStrategies": [
+                    {
+                        "session": "NORMAL",
+                        "duration": "DAY",
+                        "orderType": "STOP",
+                        "complexOrderStrategyType": "NONE",
+                        "quantity": 1.0,
+                        "filledQuantity": 0.0,
+                        "remainingQuantity": 1.0,
+                        "requestedDestination": "AUTO",
+                        "destinationLinkName": "AutoRoute",
+                        "stopType": "STANDARD",
+                        "orderLegCollection": [
+                            {
+                                "orderLegType": "OPTION",
+                                "legId": 1,
+                                "instrument": {
+                                    "assetType": "OPTION",
+                                    "cusip": "0QQQ..UP40487000",
+                                    "symbol": "QQQ   240925P00487000",
+                                    "description": "INVESCO QQQ TR 09/25/2024 $487 Put",
+                                    "instrumentId": 223459794,
+                                    "type": "VANILLA",
+                                    "putCall": "PUT",
+                                    "underlyingSymbol": "QQQ",
+                                    "optionDeliverables": [
+                                        {
+                                            "symbol": "QQQ",
+                                            "deliverableUnits": 100.0
+                                        }
+                                    ]
+                                },
+                                "instruction": "SELL_TO_CLOSE",
+                                "positionEffect": "CLOSING",
+                                "quantity": 1.0
+                            }
+                        ],
+                        "orderStrategyType": "SINGLE",
+                        "orderId": 1001694324192,
+                        "cancelable": true,
+                        "editable": false,
+                        "status": "AWAITING_PARENT_ORDER",
+                        "enteredTime": "2024-09-25T14:08:32+0000",
+                        "tag": "API_TOS:AT_LADDER_AS",
+                        "accountNumber": 86638932
+                    },
+                    {
+                        "session": "NORMAL",
+                        "duration": "DAY",
+                        "orderType": "LIMIT",
+                        "complexOrderStrategyType": "NONE",
+                        "quantity": 1.0,
+                        "filledQuantity": 0.0,
+                        "remainingQuantity": 1.0,
+                        "requestedDestination": "AUTO",
+                        "destinationLinkName": "AutoRoute",
+                        "priceLinkBasis": "TRIGGER",
+                        "priceLinkType": "VALUE",
+                        "priceOffset": 0.5,
+                        "orderLegCollection": [
+                            {
+                                "orderLegType": "OPTION",
+                                "legId": 1,
+                                "instrument": {
+                                    "assetType": "OPTION",
+                                    "cusip": "0QQQ..UP40487000",
+                                    "symbol": "QQQ   240925P00487000",
+                                    "description": "INVESCO QQQ TR 09/25/2024 $487 Put",
+                                    "instrumentId": 223459794,
+                                    "type": "VANILLA",
+                                    "putCall": "PUT",
+                                    "underlyingSymbol": "QQQ",
+                                    "optionDeliverables": [
+                                        {
+                                            "symbol": "QQQ",
+                                            "deliverableUnits": 100.0
+                                        }
+                                    ]
+                                },
+                                "instruction": "SELL_TO_CLOSE",
+                                "positionEffect": "CLOSING",
+                                "quantity": 1.0
+                            }
+                        ],
+                        "orderStrategyType": "SINGLE",
+                        "orderId": 1001694324191,
+                        "cancelable": true,
+                        "editable": false,
+                        "status": "AWAITING_PARENT_ORDER",
+                        "enteredTime": "2024-09-25T14:08:32+0000",
+                        "tag": "API_TOS:AT_LADDER_AS",
+                        "accountNumber": 86638932
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "session": "NORMAL",
+        "duration": "DAY",
+        "orderType": "LIMIT",
+        "complexOrderStrategyType": "NONE",
+        "quantity": 1.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 0.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "CDRG",
+        "price": 1.75,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0SPXW.UO45720000",
+                    "symbol": "SPXW  240924P05720000",
+                    "description": "S & P 500 INDEX 09/24/2024 $5720 Put",
+                    "instrumentId": 223094200,
+                    "type": "VANILLA",
+                    "putCall": "PUT",
+                    "underlyingSymbol": "SPXW",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "$SPX",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001688465249,
+        "cancelable": false,
+        "editable": false,
+        "status": "REPLACED",
+        "enteredTime": "2024-09-24T18:56:34+0000",
+        "closeTime": "2024-09-24T18:56:40+0000",
+        "tag": "API_TOS:AT_LADDER_AS",
+        "accountNumber": "account_number",
+        "orderActivityCollection": [
+            {
+                "activityType": "EXECUTION",
+                "activityId": 86340339058,
+                "executionType": "CANCELED",
+                "quantity": 1.0,
+                "orderRemainingQuantity": 0.0,
+                "executionLegs": [
+                    {
+                        "legId": 1,
+                        "quantity": 1.0,
+                        "mismarkedQuantity": 0.0,
+                        "price": 0.0,
+                        "time": "2024-09-24T18:56:40+0000",
+                        "instrumentId": 223094200
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "session": "NORMAL",
+        "duration": "DAY",
+        "orderType": "LIMIT",
+        "complexOrderStrategyType": "NONE",
+        "quantity": 1.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 0.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "WEXM",
+        "price": 1.8,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0SPXW.UO45720000",
+                    "symbol": "SPXW  240924P05720000",
+                    "description": "S & P 500 INDEX 09/24/2024 $5720 Put",
+                    "instrumentId": 223094200,
+                    "type": "VANILLA",
+                    "putCall": "PUT",
+                    "underlyingSymbol": "SPXW",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "$SPX",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001688465227,
+        "cancelable": false,
+        "editable": false,
+        "status": "REPLACED",
+        "enteredTime": "2024-09-24T18:55:57+0000",
+        "closeTime": "2024-09-24T18:56:34+0000",
+        "tag": "API_TOS:AT_LADDER_AS",
+        "accountNumber": "account_number",
+        "orderActivityCollection": [
+            {
+                "activityType": "EXECUTION",
+                "activityId": 86340339040,
+                "executionType": "CANCELED",
+                "quantity": 1.0,
+                "orderRemainingQuantity": 0.0,
+                "executionLegs": [
+                    {
+                        "legId": 1,
+                        "quantity": 1.0,
+                        "mismarkedQuantity": 0.0,
+                        "price": 0.0,
+                        "time": "2024-09-24T18:56:34+0000",
+                        "instrumentId": 223094200
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "session": "NORMAL",
+        "duration": "DAY",
+        "orderType": "LIMIT",
+        "complexOrderStrategyType": "NONE",
+        "quantity": 1.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 0.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "CDRG",
+        "price": 1.45,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0SPXW.UO45720000",
+                    "symbol": "SPXW  240924P05720000",
+                    "description": "S & P 500 INDEX 09/24/2024 $5720 Put",
+                    "instrumentId": 223094200,
+                    "type": "VANILLA",
+                    "putCall": "PUT",
+                    "underlyingSymbol": "SPXW",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "$SPX",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001688465224,
+        "cancelable": false,
+        "editable": false,
+        "status": "REPLACED",
+        "enteredTime": "2024-09-24T18:55:49+0000",
+        "closeTime": "2024-09-24T18:55:57+0000",
+        "tag": "API_TOS:AT_LADDER_AS",
+        "accountNumber": "account_number",
+        "orderActivityCollection": [
+            {
+                "activityType": "EXECUTION",
+                "activityId": 86340338950,
+                "executionType": "CANCELED",
+                "quantity": 1.0,
+                "orderRemainingQuantity": 0.0,
+                "executionLegs": [
+                    {
+                        "legId": 1,
+                        "quantity": 1.0,
+                        "mismarkedQuantity": 0.0,
+                        "price": 0.0,
+                        "time": "2024-09-24T18:55:57+0000",
+                        "instrumentId": 223094200
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "session": "NORMAL",
+        "duration": "DAY",
+        "orderType": "LIMIT",
+        "complexOrderStrategyType": "NONE",
+        "quantity": 1.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 0.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "CDRG",
+        "price": 1.1,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0SPXW.UO45720000",
+                    "symbol": "SPXW  240924P05720000",
+                    "description": "S & P 500 INDEX 09/24/2024 $5720 Put",
+                    "instrumentId": 223094200,
+                    "type": "VANILLA",
+                    "putCall": "PUT",
+                    "underlyingSymbol": "SPXW",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "$SPX",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001688465218,
+        "cancelable": false,
+        "editable": false,
+        "status": "REPLACED",
+        "enteredTime": "2024-09-24T18:55:41+0000",
+        "closeTime": "2024-09-24T18:55:49+0000",
+        "tag": "API_TOS:AT_LADDER_AS",
+        "accountNumber": "account_number",
+        "orderActivityCollection": [
+            {
+                "activityType": "EXECUTION",
+                "activityId": 86340338928,
+                "executionType": "CANCELED",
+                "quantity": 1.0,
+                "orderRemainingQuantity": 0.0,
+                "executionLegs": [
+                    {
+                        "legId": 1,
+                        "quantity": 1.0,
+                        "mismarkedQuantity": 0.0,
+                        "price": 0.0,
+                        "time": "2024-09-24T18:55:49+0000",
+                        "instrumentId": 223094200
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "session": "NORMAL",
+        "duration": "DAY",
+        "orderType": "LIMIT",
+        "complexOrderStrategyType": "NONE",
+        "quantity": 1.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 0.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "DFIN",
+        "price": 1.85,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0SPXW.UO45720000",
+                    "symbol": "SPXW  240924P05720000",
+                    "description": "S & P 500 INDEX 09/24/2024 $5720 Put",
+                    "instrumentId": 223094200,
+                    "type": "VANILLA",
+                    "putCall": "PUT",
+                    "underlyingSymbol": "SPXW",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "$SPX",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001688465121,
+        "cancelable": false,
+        "editable": false,
+        "status": "REPLACED",
+        "enteredTime": "2024-09-24T18:53:17+0000",
+        "closeTime": "2024-09-24T18:55:41+0000",
+        "tag": "API_TOS:AT_LADDER_AS",
+        "accountNumber": "account_number",
+        "orderActivityCollection": [
+            {
+                "activityType": "EXECUTION",
+                "activityId": 86340338887,
+                "executionType": "CANCELED",
+                "quantity": 1.0,
+                "orderRemainingQuantity": 0.0,
+                "executionLegs": [
+                    {
+                        "legId": 1,
+                        "quantity": 1.0,
+                        "mismarkedQuantity": 0.0,
+                        "price": 0.0,
+                        "time": "2024-09-24T18:55:41+0000",
+                        "instrumentId": 223094200
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "session": "NORMAL",
+        "duration": "DAY",
+        "orderType": "LIMIT",
+        "complexOrderStrategyType": "NONE",
+        "quantity": 1.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 0.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "CDRG",
+        "price": 1.8,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0SPXW.UO45720000",
+                    "symbol": "SPXW  240924P05720000",
+                    "description": "S & P 500 INDEX 09/24/2024 $5720 Put",
+                    "instrumentId": 223094200,
+                    "type": "VANILLA",
+                    "putCall": "PUT",
+                    "underlyingSymbol": "SPXW",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "$SPX",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001688465100,
+        "cancelable": false,
+        "editable": false,
+        "status": "REPLACED",
+        "enteredTime": "2024-09-24T18:52:32+0000",
+        "closeTime": "2024-09-24T18:53:17+0000",
+        "tag": "API_TOS:AT_LADDER_AS",
+        "accountNumber": "account_number",
+        "orderActivityCollection": [
+            {
+                "activityType": "EXECUTION",
+                "activityId": 86340338507,
+                "executionType": "CANCELED",
+                "quantity": 1.0,
+                "orderRemainingQuantity": 0.0,
+                "executionLegs": [
+                    {
+                        "legId": 1,
+                        "quantity": 1.0,
+                        "mismarkedQuantity": 0.0,
+                        "price": 0.0,
+                        "time": "2024-09-24T18:53:17+0000",
+                        "instrumentId": 223094200
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "session": "NORMAL",
+        "duration": "DAY",
+        "orderType": "LIMIT",
+        "complexOrderStrategyType": "NONE",
+        "quantity": 1.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 0.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "CDRG",
+        "price": 1.85,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0SPXW.UO45720000",
+                    "symbol": "SPXW  240924P05720000",
+                    "description": "S & P 500 INDEX 09/24/2024 $5720 Put",
+                    "instrumentId": 223094200,
+                    "type": "VANILLA",
+                    "putCall": "PUT",
+                    "underlyingSymbol": "SPXW",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "$SPX",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001688464964,
+        "cancelable": false,
+        "editable": false,
+        "status": "CANCELED",
+        "enteredTime": "2024-09-24T18:50:44+0000",
+        "closeTime": "2024-09-24T18:50:51+0000",
+        "tag": "API_TOS:AT_LADDER_AS",
+        "accountNumber": "account_number",
+        "orderActivityCollection": [
+            {
+                "activityType": "EXECUTION",
+                "activityId": 86340337979,
+                "executionType": "CANCELED",
+                "quantity": 1.0,
+                "orderRemainingQuantity": 0.0,
+                "executionLegs": [
+                    {
+                        "legId": 1,
+                        "quantity": 1.0,
+                        "mismarkedQuantity": 0.0,
+                        "price": 0.0,
+                        "time": "2024-09-24T18:50:51+0000",
+                        "instrumentId": 223094200
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "session": "NORMAL",
+        "duration": "DAY",
+        "orderType": "LIMIT",
+        "complexOrderStrategyType": "NONE",
+        "quantity": 1.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 0.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "DFIN",
+        "price": 2.0,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0SPXW.UO45720000",
+                    "symbol": "SPXW  240924P05720000",
+                    "description": "S & P 500 INDEX 09/24/2024 $5720 Put",
+                    "instrumentId": 223094200,
+                    "type": "VANILLA",
+                    "putCall": "PUT",
+                    "underlyingSymbol": "SPXW",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "$SPX",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001688464945,
+        "cancelable": false,
+        "editable": false,
+        "status": "REPLACED",
+        "enteredTime": "2024-09-24T18:50:20+0000",
+        "closeTime": "2024-09-24T18:50:45+0000",
+        "tag": "API_TOS:AT_LADDER_AS",
+        "accountNumber": "account_number",
+        "orderActivityCollection": [
+            {
+                "activityType": "EXECUTION",
+                "activityId": 86340337919,
+                "executionType": "CANCELED",
+                "quantity": 1.0,
+                "orderRemainingQuantity": 0.0,
+                "executionLegs": [
+                    {
+                        "legId": 1,
+                        "quantity": 1.0,
+                        "mismarkedQuantity": 0.0,
+                        "price": 0.0,
+                        "time": "2024-09-24T18:50:45+0000",
+                        "instrumentId": 223094200
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "session": "NORMAL",
+        "duration": "DAY",
+        "orderType": "LIMIT",
+        "complexOrderStrategyType": "NONE",
+        "quantity": 1.0,
+        "filledQuantity": 1.0,
+        "remainingQuantity": 0.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "CDRG",
+        "price": 1.65,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0SPXW.UO45720000",
+                    "symbol": "SPXW  240924P05720000",
+                    "description": "S & P 500 INDEX 09/24/2024 $5720 Put",
+                    "instrumentId": 223094200,
+                    "type": "VANILLA",
+                    "putCall": "PUT",
+                    "underlyingSymbol": "SPXW",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "$SPX",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "BUY_TO_OPEN",
+                "positionEffect": "OPENING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001688464864,
+        "cancelable": false,
+        "editable": false,
+        "status": "FILLED",
+        "enteredTime": "2024-09-24T18:48:39+0000",
+        "closeTime": "2024-09-24T18:48:39+0000",
+        "tag": "API_TOS:TRADE_ALL",
+        "accountNumber": "account_number",
+        "orderActivityCollection": [
+            {
+                "activityType": "EXECUTION",
+                "activityId": 86340337594,
+                "executionType": "FILL",
+                "quantity": 1.0,
+                "orderRemainingQuantity": 0.0,
+                "executionLegs": [
+                    {
+                        "legId": 1,
+                        "quantity": 1.0,
+                        "mismarkedQuantity": 0.0,
+                        "price": 1.65,
+                        "time": "2024-09-24T18:48:39+0000",
+                        "instrumentId": 223094200
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "session": "NORMAL",
+        "duration": "DAY",
+        "orderType": "NET_DEBIT",
+        "complexOrderStrategyType": "VERTICAL",
+        "quantity": 3.0,
+        "filledQuantity": 3.0,
+        "remainingQuantity": 0.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "CDRG",
+        "price": 0.05,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0SPXW.UO45715000",
+                    "symbol": "SPXW  240924P05715000",
+                    "description": "S & P 500 INDEX 09/24/2024 $5715 Put",
+                    "instrumentId": 223402967,
+                    "type": "VANILLA",
+                    "putCall": "PUT",
+                    "underlyingSymbol": "SPXW",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "$SPX",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "BUY_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 3.0
+            },
+            {
+                "orderLegType": "OPTION",
+                "legId": 2,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0SPXW.UO45705000",
+                    "symbol": "SPXW  240924P05705000",
+                    "description": "S & P 500 INDEX 09/24/2024 $5705 Put",
+                    "instrumentId": 223510134,
+                    "type": "VANILLA",
+                    "putCall": "PUT",
+                    "underlyingSymbol": "SPXW",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "$SPX",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 3.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001687789151,
+        "cancelable": false,
+        "editable": false,
+        "status": "FILLED",
+        "enteredTime": "2024-09-24T18:14:09+0000",
+        "closeTime": "2024-09-24T19:41:39+0000",
+        "tag": "API_TOS:POS_STMT",
+        "accountNumber": "account_number",
+        "orderActivityCollection": [
+            {
+                "activityType": "EXECUTION",
+                "activityId": 86344033241,
+                "executionType": "FILL",
+                "quantity": 3.0,
+                "orderRemainingQuantity": 0.0,
+                "executionLegs": [
+                    {
+                        "legId": 1,
+                        "quantity": 3.0,
+                        "mismarkedQuantity": 0.0,
+                        "price": 0.12,
+                        "time": "2024-09-24T19:41:39+0000",
+                        "instrumentId": 223402967
+                    },
+                    {
+                        "legId": 2,
+                        "quantity": 3.0,
+                        "mismarkedQuantity": 0.0,
+                        "price": 0.07,
+                        "time": "2024-09-24T19:41:39+0000",
+                        "instrumentId": 223510134
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "session": "NORMAL",
+        "duration": "DAY",
+        "orderType": "NET_CREDIT",
+        "complexOrderStrategyType": "VERTICAL",
+        "quantity": 3.0,
+        "filledQuantity": 3.0,
+        "remainingQuantity": 0.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "DFIN",
+        "price": 0.6,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0SPXW.UO45715000",
+                    "symbol": "SPXW  240924P05715000",
+                    "description": "S & P 500 INDEX 09/24/2024 $5715 Put",
+                    "instrumentId": 223402967,
+                    "type": "VANILLA",
+                    "putCall": "PUT",
+                    "underlyingSymbol": "SPXW",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "$SPX",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_OPEN",
+                "positionEffect": "OPENING",
+                "quantity": 3.0
+            },
+            {
+                "orderLegType": "OPTION",
+                "legId": 2,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0SPXW.UO45705000",
+                    "symbol": "SPXW  240924P05705000",
+                    "description": "S & P 500 INDEX 09/24/2024 $5705 Put",
+                    "instrumentId": 223510134,
+                    "type": "VANILLA",
+                    "putCall": "PUT",
+                    "underlyingSymbol": "SPXW",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "$SPX",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "BUY_TO_OPEN",
+                "positionEffect": "OPENING",
+                "quantity": 3.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001687788979,
+        "cancelable": false,
+        "editable": false,
+        "status": "FILLED",
+        "enteredTime": "2024-09-24T18:11:27+0000",
+        "closeTime": "2024-09-24T18:12:18+0000",
+        "tag": "API_TOS:TRADE_ALL",
+        "accountNumber": "account_number",
+        "orderActivityCollection": [
+            {
+                "activityType": "EXECUTION",
+                "activityId": 86336821039,
+                "executionType": "FILL",
+                "quantity": 1.0,
+                "orderRemainingQuantity": 2.0,
+                "executionLegs": [
+                    {
+                        "legId": 1,
+                        "quantity": 1.0,
+                        "mismarkedQuantity": 0.0,
+                        "price": 1.22,
+                        "time": "2024-09-24T18:12:18+0000",
+                        "instrumentId": 223402967
+                    },
+                    {
+                        "legId": 2,
+                        "quantity": 1.0,
+                        "mismarkedQuantity": 0.0,
+                        "price": 0.62,
+                        "time": "2024-09-24T18:12:18+0000",
+                        "instrumentId": 223510134
+                    }
+                ]
+            },
+            {
+                "activityType": "EXECUTION",
+                "activityId": 86336821042,
+                "executionType": "FILL",
+                "quantity": 2.0,
+                "orderRemainingQuantity": 0.0,
+                "executionLegs": [
+                    {
+                        "legId": 1,
+                        "quantity": 2.0,
+                        "mismarkedQuantity": 0.0,
+                        "price": 1.22,
+                        "time": "2024-09-24T18:12:18+0000",
+                        "instrumentId": 223402967
+                    },
+                    {
+                        "legId": 2,
+                        "quantity": 2.0,
+                        "mismarkedQuantity": 0.0,
+                        "price": 0.62,
+                        "time": "2024-09-24T18:12:18+0000",
+                        "instrumentId": 223510134
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "session": "NORMAL",
+        "duration": "DAY",
+        "orderType": "NET_CREDIT",
+        "complexOrderStrategyType": "VERTICAL",
+        "quantity": 3.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 0.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "CDRG",
+        "price": 0.65,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0SPXW.UO45715000",
+                    "symbol": "SPXW  240924P05715000",
+                    "description": "S & P 500 INDEX 09/24/2024 $5715 Put",
+                    "instrumentId": 223402967,
+                    "type": "VANILLA",
+                    "putCall": "PUT",
+                    "underlyingSymbol": "SPXW",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "$SPX",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_OPEN",
+                "positionEffect": "OPENING",
+                "quantity": 3.0
+            },
+            {
+                "orderLegType": "OPTION",
+                "legId": 2,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0SPXW.UO45705000",
+                    "symbol": "SPXW  240924P05705000",
+                    "description": "S & P 500 INDEX 09/24/2024 $5705 Put",
+                    "instrumentId": 223510134,
+                    "type": "VANILLA",
+                    "putCall": "PUT",
+                    "underlyingSymbol": "SPXW",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "$SPX",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "BUY_TO_OPEN",
+                "positionEffect": "OPENING",
+                "quantity": 3.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001687788447,
+        "cancelable": false,
+        "editable": false,
+        "status": "CANCELED",
+        "enteredTime": "2024-09-24T18:02:25+0000",
+        "closeTime": "2024-09-24T18:02:59+0000",
+        "tag": "API_TOS:TRADE_ALL",
+        "accountNumber": "account_number",
+        "orderActivityCollection": [
+            {
+                "activityType": "EXECUTION",
+                "activityId": 86336818936,
+                "executionType": "CANCELED",
+                "quantity": 3.0,
+                "orderRemainingQuantity": 0.0,
+                "executionLegs": [
+                    {
+                        "legId": 1,
+                        "quantity": 3.0,
+                        "mismarkedQuantity": 0.0,
+                        "price": 0.0,
+                        "time": "2024-09-24T18:02:59+0000",
+                        "instrumentId": 223402967
+                    },
+                    {
+                        "legId": 2,
+                        "quantity": 3.0,
+                        "mismarkedQuantity": 0.0,
+                        "price": 0.0,
+                        "time": "2024-09-24T18:02:59+0000",
+                        "instrumentId": 223510134
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "session": "NORMAL",
+        "duration": "GOOD_TILL_CANCEL",
+        "orderType": "LIMIT",
+        "cancelTime": "2024-11-15T21:00:00+0000",
+        "complexOrderStrategyType": "NONE",
+        "quantity": 1.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 1.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "CDRG",
+        "price": 0.05,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0VRT..WF40072500",
+                    "symbol": "VRT   241115P00072500",
+                    "description": "VERTIV HLDGS CO 11/15/2024 $72.5 Put",
+                    "instrumentId": 216218027,
+                    "type": "VANILLA",
+                    "putCall": "PUT",
+                    "underlyingSymbol": "VRT",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "VRT",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "BUY_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001676953367,
+        "cancelable": true,
+        "editable": true,
+        "status": "PENDING_ACTIVATION",
+        "enteredTime": "2024-09-23T20:12:26+0000",
+        "tag": "API_TOS:POS_STMT",
+        "accountNumber": "account_number"
+    },
+    {
+        "session": "NORMAL",
+        "duration": "DAY",
+        "orderType": "NET_CREDIT",
+        "complexOrderStrategyType": "VERTICAL",
+        "quantity": 1.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 0.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "WEXM",
+        "price": 20.0,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0CRWD.CL50370000",
+                    "symbol": "CRWD  250321C00370000",
+                    "description": "CROWDSTRIKE HLDGS INC 03/21/2025 $370 Call",
+                    "instrumentId": 214983857,
+                    "type": "VANILLA",
+                    "putCall": "CALL",
+                    "underlyingSymbol": "CRWD",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "CRWD",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            },
+            {
+                "orderLegType": "OPTION",
+                "legId": 2,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0CRWD.CL50470000",
+                    "symbol": "CRWD  250321C00470000",
+                    "description": "CROWDSTRIKE HLDGS INC 03/21/2025 $470 Call",
+                    "instrumentId": 214868910,
+                    "type": "VANILLA",
+                    "putCall": "CALL",
+                    "underlyingSymbol": "CRWD",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "CRWD",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "BUY_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001676953306,
+        "cancelable": false,
+        "editable": false,
+        "status": "EXPIRED",
+        "enteredTime": "2024-09-23T20:10:29+0000",
+        "closeTime": "2024-09-24T20:06:11+0000",
+        "tag": "API_TOS:POS_STMT",
+        "accountNumber": "account_number"
+    },
+    {
+        "session": "NORMAL",
+        "duration": "GOOD_TILL_CANCEL",
+        "orderType": "LIMIT",
+        "cancelTime": "2025-03-21T20:00:00+0000",
+        "complexOrderStrategyType": "NONE",
+        "quantity": 1.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 1.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "CDRG",
+        "price": 20.0,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0CRM..FK50320000",
+                    "symbol": "CRM   250620C00320000",
+                    "description": "Salesforce Inc 06/20/2025 $320 Call",
+                    "instrumentId": 201825718,
+                    "type": "VANILLA",
+                    "putCall": "CALL",
+                    "underlyingSymbol": "CRM",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "CRM",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001676953261,
+        "cancelable": true,
+        "editable": true,
+        "status": "PENDING_ACTIVATION",
+        "enteredTime": "2024-09-23T20:08:53+0000",
+        "tag": "API_TOS:POS_STMT",
+        "accountNumber": "account_number"
+    },
+    {
+        "session": "NORMAL",
+        "duration": "GOOD_TILL_CANCEL",
+        "orderType": "LIMIT",
+        "cancelTime": "2025-03-21T20:00:00+0000",
+        "complexOrderStrategyType": "NONE",
+        "quantity": 1.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 1.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "CDRG",
+        "price": 20.0,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0AMZN.CL50200000",
+                    "symbol": "AMZN  250321C00200000",
+                    "description": "Amazon.com Inc 03/21/2025 $200 Call",
+                    "instrumentId": 212118578,
+                    "type": "VANILLA",
+                    "putCall": "CALL",
+                    "underlyingSymbol": "AMZN",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "AMZN",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001676953243,
+        "cancelable": true,
+        "editable": true,
+        "status": "PENDING_ACTIVATION",
+        "enteredTime": "2024-09-23T20:07:10+0000",
+        "tag": "API_TOS:POS_STMT",
+        "accountNumber": "account_number"
+    },
+    {
+        "session": "NORMAL",
+        "duration": "GOOD_TILL_CANCEL",
+        "orderType": "LIMIT",
+        "cancelTime": "2025-03-21T20:00:00+0000",
+        "complexOrderStrategyType": "NONE",
+        "quantity": 1.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 1.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "CDRG",
+        "price": 18.0,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0MU...FK50160000",
+                    "symbol": "MU    250620C00160000",
+                    "description": "MICRON TECHNOLOGY INC 06/20/2025 $160 Call",
+                    "instrumentId": 215425413,
+                    "type": "VANILLA",
+                    "putCall": "CALL",
+                    "underlyingSymbol": "MU",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "MU",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001676953238,
+        "cancelable": true,
+        "editable": true,
+        "status": "PENDING_ACTIVATION",
+        "enteredTime": "2024-09-23T20:07:01+0000",
+        "tag": "API_TOS:POS_STMT",
+        "accountNumber": "account_number"
+    },
+    {
+        "session": "NORMAL",
+        "duration": "GOOD_TILL_CANCEL",
+        "orderType": "LIMIT",
+        "cancelTime": "2025-01-17T21:00:00+0000",
+        "complexOrderStrategyType": "NONE",
+        "quantity": 1.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 1.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "MSCO",
+        "price": 14.0,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0GOOGLAH50200000",
+                    "symbol": "GOOGL 250117C00200000",
+                    "description": "ALPHABET INC 01/17/2025 $200 Call",
+                    "instrumentId": 164398016,
+                    "type": "VANILLA",
+                    "putCall": "CALL",
+                    "underlyingSymbol": "GOOGL",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "GOOGL",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001676953229,
+        "cancelable": true,
+        "editable": true,
+        "status": "PENDING_ACTIVATION",
+        "enteredTime": "2024-09-23T20:06:22+0000",
+        "tag": "API_TOS:POS_STMT",
+        "accountNumber": "account_number"
+    },
+    {
+        "session": "NORMAL",
+        "duration": "GOOD_TILL_CANCEL",
+        "orderType": "LIMIT",
+        "cancelTime": "2025-03-21T20:00:00+0000",
+        "complexOrderStrategyType": "NONE",
+        "quantity": 1.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 1.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "DFIN",
+        "price": 50.0,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0MSFT.FK50470000",
+                    "symbol": "MSFT  250620C00470000",
+                    "description": "Microsoft Corp 06/20/2025 $470 Call",
+                    "instrumentId": 190693062,
+                    "type": "VANILLA",
+                    "putCall": "CALL",
+                    "underlyingSymbol": "MSFT",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "MSFT",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001676952996,
+        "cancelable": true,
+        "editable": true,
+        "status": "PENDING_ACTIVATION",
+        "enteredTime": "2024-09-23T19:59:02+0000",
+        "tag": "API_TOS:POS_STMT",
+        "accountNumber": "account_number"
+    },
+    {
+        "session": "NORMAL",
+        "duration": "GOOD_TILL_CANCEL",
+        "orderType": "NET_CREDIT",
+        "cancelTime": "2025-01-17T21:00:00+0000",
+        "complexOrderStrategyType": "VERTICAL",
+        "quantity": 1.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 1.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "CDRG",
+        "price": 25.0,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0ASML.AH51200000",
+                    "symbol": "ASML  250117C01200000",
+                    "description": "ASML HLDG N V 01/17/2025 $1200 Call",
+                    "instrumentId": 211754717,
+                    "type": "VANILLA",
+                    "putCall": "CALL",
+                    "underlyingSymbol": "ASML",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "ASML",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            },
+            {
+                "orderLegType": "OPTION",
+                "legId": 2,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0ASML.AH51400000",
+                    "symbol": "ASML  250117C01400000",
+                    "description": "ASML HLDG N V 01/17/2025 $1400 Call",
+                    "instrumentId": 212898313,
+                    "type": "VANILLA",
+                    "putCall": "CALL",
+                    "underlyingSymbol": "ASML",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "ASML",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "BUY_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001676952945,
+        "cancelable": true,
+        "editable": true,
+        "status": "PENDING_ACTIVATION",
+        "enteredTime": "2024-09-23T19:57:54+0000",
+        "tag": "API_TOS:POS_STMT",
+        "accountNumber": "account_number"
+    },
+    {
+        "session": "NORMAL",
+        "duration": "GOOD_TILL_CANCEL",
+        "orderType": "LIMIT",
+        "cancelTime": "2024-10-18T20:00:00+0000",
+        "complexOrderStrategyType": "NONE",
+        "quantity": 1.0,
+        "filledQuantity": 0.0,
+        "remainingQuantity": 1.0,
+        "requestedDestination": "AUTO",
+        "destinationLinkName": "CDRG",
+        "price": 20.0,
+        "orderLegCollection": [
+            {
+                "orderLegType": "OPTION",
+                "legId": 1,
+                "instrument": {
+                    "assetType": "OPTION",
+                    "cusip": "0AAPL.JI40215000",
+                    "symbol": "AAPL  241018C00215000",
+                    "description": "APPLE INC 10/18/2024 $215 Call",
+                    "instrumentId": 212575102,
+                    "type": "VANILLA",
+                    "putCall": "CALL",
+                    "underlyingSymbol": "AAPL",
+                    "optionDeliverables": [
+                        {
+                            "symbol": "AAPL",
+                            "deliverableUnits": 100.0
+                        }
+                    ]
+                },
+                "instruction": "SELL_TO_CLOSE",
+                "positionEffect": "CLOSING",
+                "quantity": 1.0
+            }
+        ],
+        "orderStrategyType": "SINGLE",
+        "orderId": 1001676952764,
+        "cancelable": true,
+        "editable": true,
+        "status": "PENDING_ACTIVATION",
+        "enteredTime": "2024-09-23T19:54:03+0000",
+        "tag": "API_TOS:POS_STMT",
+        "accountNumber": "account_number"
+    }
+]

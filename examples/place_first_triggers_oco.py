@@ -28,13 +28,14 @@ try:
     response = schwab_api.place_first_triggers_oco_order(
         account_hash=account_hash,
         order_type='LIMIT',
-        price=490.00,  # Changed to float
+        price=480,  
         quantity=1,
-        symbol='QQQ',
+        symbol='QQQ', # OPTION "SPXW  240925P05720000" or "QQQ   240925P00487000"
         duration='DAY',  # Can also be 'GOOD_TILL_CANCEL'
-        instruction='SELL_SHORT',  # Can also be 'BUY'
-        stop_loss=491.00,
-        profit_target=480.00
+        instruction='BUY',  
+        asset_type='EQUITY',
+        stop_loss=479,
+        profit_target=490
     )
 
     # Handle the response

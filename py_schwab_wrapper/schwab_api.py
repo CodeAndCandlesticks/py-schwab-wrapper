@@ -9,6 +9,7 @@ import requests
 import warnings
 import pytz
 from requests.exceptions import HTTPError
+from .utils.parameter_utils import get_inverse_instruction
 
 class SchwabAPI:
     def __init__(self, client_id, client_secret, base_url='https://api.schwabapi.com', load_token_func=None, save_token_func=None):
@@ -390,7 +391,7 @@ class SchwabAPI:
 
 
         # Invert the instruction for stop loss and profit target
-        inverse_instruction = "SELL" if instruction == "BUY" else "BUY_TO_COVER"
+        inverse_instruction = get_inverse_instruction(instruction=instruction, asset_type=asset_type)
 
         # Construct the First Triggers OCO order payload
         order_payload = {

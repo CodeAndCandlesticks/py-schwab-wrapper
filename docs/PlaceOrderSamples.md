@@ -1,5 +1,7 @@
 # Place Order Samples
-Below, you will find examples specific to orders for use in the Schwab Trader API POST and PUT Order endpoints. Order entry will only be available for the assetType 'EQUIT' and 'OPTION as of this time.
+Source: https://developer.schwab.com/products/trader-api--individual/details/documentation/Retail%20Trader%20API%20Production
+
+Below, you will find examples specific to orders for use in the Schwab Trader API POST and PUT Order endpoints. Order entry will only be available for the assetType 'EQUITY' and 'OPTION' as of this time.
 
 Trader API applications (Individual and Commercial) are limited in the number of PUT/POST/DELETE order requests per minute per account based on the properties of the application specified during registration or follow-up process. Throttle limits for orders can be set from zero (0) to 120 requests per minute per account. Get order requests are unthrottled. Contact TraderAPI@schwab.com for further information.
 
@@ -7,7 +9,20 @@ Trader API applications (Individual and Commercial) are limited in the number of
 Options symbols are broken down as: 
 Underlying Symbol (6 characters including spaces) | Expiration (6 characters) | Call/Put (1 character) | Strike Price (5+3=8 characters) 
 
+### Valid Option Symbols
 ```
+Option Symbol: SPXW  240925P05720000
+Stock Symbol: SPX
+Expiration 2024/09/25
+Type: Put
+Strike Price: 5720
+
+Option Symbol: QQQ   240925P00487000
+Stock Symbol: QQQ
+Expiration 2024/09/25
+Type: Put
+Strike Price: 487.00
+
 Option Symbol: XYZ 210115C00050000
 Stock Symbol: XYZ
 Expiration: 2021/01/15
@@ -27,19 +42,21 @@ Type: Call
 Strike Price: $62.50
 ``` 
 
-Instruction for EQUITY and OPTION 
+## Instruction for EQUITY and OPTIONS 
  
+| Instruction      | EQUITY (Stocks and ETFs) | Option   |
+|------------------|--------------------------|----------|
+| BUY              | ACCEPTED                 | REJECT   |
+| SELL             | ACCEPTED                 | REJECT   |
+| BUY_TO_OPEN      | REJECT                   | ACCEPTED |
+| BUY_TO_COVER     | ACCEPTED                 | REJECT   |
+| BUY_TO_CLOSE     | REJECT                   | ACCEPTED |
+| SELL_TO_OPEN     | REJECT                   | ACCEPTED |
+| SELL_SHORT       | ACCEPTED                 | REJECT   |
+| SELL_TO_CLOSE    | REJECT                   | ACCEPTED |
 
-Instruction	EQUITY (Stocks and ETFs)	Option
-BUY	ACCEPTED	REJECT
-SELL	ACCEPTED	REJECT
-BUY_TO_OPEN	REJECT	ACCEPTED
-BUY_TO_COVER	ACCEPTED	REJECT
-BUY_TO_CLOSE	REJECT	ACCEPTED
-SELL_TO_OPEN	REJECT	ACCEPTED
-SELL_SHORT	ACCEPTED	REJECT
-SELL_TO_CLOSE	REJECT	ACCEPTED
-Buy Market: Stock
+
+## Buy Market: Stock
 Buy 15 shares of XYZ at the Market good for the Day.
  
 ```
@@ -60,9 +77,8 @@ Buy 15 shares of XYZ at the Market good for the Day.
   ] 
 }
 ``` 
- 
 
-Buy Limit: Single Option 
+## Buy Limit: Single Option 
 Buy to open 10 contracts of the XYZ March 15, 2024 $50 CALL at a Limit of $6.45 good for the Day.
  
 ```
@@ -87,7 +103,7 @@ Buy to open 10 contracts of the XYZ March 15, 2024 $50 CALL at a Limit of $6.45 
 ``` 
  
 
-Buy Limit: Vertical Call Spread
+## Buy Limit: Vertical Call Spread
 Buy to open 2 contracts of the XYZ March 15, 2024 $45 Put and Sell to open 2 contract of the XYZ March 15, 2024 $43 Put at a LIMIT price of $0.10 good for the Day.
  
 ```
@@ -117,9 +133,8 @@ Buy to open 2 contracts of the XYZ March 15, 2024 $45 Put and Sell to open 2 con
   ]
 }
 ``` 
- 
 
-Conditional Order: One Triggers Another
+## Conditional Order: One Triggers Another
 Buy 10 shares of XYZ at a Limit price of $34.97 good for the Day. If filled, immediately submit an order to Sell 10 shares of XYZ with a Limit price of $42.03 good for the Day. Also known as 1st Trigger Sequence.
  
 ```
@@ -160,9 +175,8 @@ Buy 10 shares of XYZ at a Limit price of $34.97 good for the Day. If filled, imm
   ] 
 }
 ``` 
- 
 
-Conditional Order: One Cancels Another
+## Conditional Order: One Cancels Another
 Sell 2 shares of XYZ at a Limit price of $45.97 and Sell 2 shares of XYZ with a Stop Limit order where the stop price is $37.03 and limit is $37.00. Both orders are sent at the same time. If one order fills, the other order is immediately cancelled. Both orders are good for the Day. Also known as an OCO order.
  
 ```
@@ -207,9 +221,8 @@ Sell 2 shares of XYZ at a Limit price of $45.97 and Sell 2 shares of XYZ with a 
   ] 
 }
 ```
- 
 
-Conditional Order: One Triggers A One Cancels Another
+## Conditional Order: One Triggers A One Cancels Another
 Buy 5 shares of XYZ at a Limit price of $14.97 good for the Day. Once filled, 2 sell orders are immediately sent: Sell 5 shares of XYZ at a Limit price of $15.27 and Sell 5 shares of XYZ with a Stop order where the stop price is $11.27. If one of the sell orders fill, the other order is immediately cancelled. Both Sell orders are Good till Cancel. Also known as a 1st Trigger OCO order.
  
 ```
@@ -274,7 +287,7 @@ Buy 5 shares of XYZ at a Limit price of $14.97 good for the Day. Once filled, 2 
 ```
  
 
-Sell Trailing Stop: Stock
+# Sell Trailing Stop: Stock
 Sell 10 shares of XYZ with a Trailing Stop where the trail is a -$10 offset from the time the order is submitted. As the stock price goes up, the -$10 trailing offset will follow. If stock XYZ goes from $110 to $130, your trail will automatically be adjusted to $120. If XYZ falls to $120 or below, a Market order is submitted. This order is good for the Day.
  
 ```

@@ -327,7 +327,7 @@ def test_get_account_numbers(schwab_api, requests_mock):
 # Test the get_orders method
 def test_get_orders(schwab_api, requests_mock):
     # Load the sample response from the file you provided
-    mock_response = load_test_data("sample_orders.json")
+    mock_response = load_test_data("sample_orders")
     
     # Mock the API request for orders
     account_hash = "sample_account_hash"
