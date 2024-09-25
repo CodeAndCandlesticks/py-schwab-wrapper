@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.2.0] - 2024-09-
+## [0.2.0] - 2024-09-28
 ### Added
 - Support for snake_case parameters for the get_price_history() method.
 - Support to retrieve account information associated with the user.
