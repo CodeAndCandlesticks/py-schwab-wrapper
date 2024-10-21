@@ -316,7 +316,9 @@ class SchwabAPI:
             print("Response did not contain JSON, returning raw text.")
             return response.text
 
-    def place_single_order(self, account_hash, order_type, quantity, symbol, price=None, duration="DAY", session="NORMAL", instruction="BUY", **kwargs):
+    def place_single_order(self, account_hash, order_type, quantity, 
+                           symbol, price=None, duration="DAY", session="NORMAL", 
+                           instruction="BUY", **kwargs):
         """
         Place a single market or limit order without stop loss or profit target.
         
@@ -460,47 +462,40 @@ class SchwabAPI:
         # Send the order
         return self.post_order(account_hash, order_payload)
 
-    # def get_chains(self, symbol, contract_type, strike_count, include_underlying_quote, strategy, interval, strike):
-    #     """
-    #     Retrieve orders for a specific account within a given time range.
+    # Options Chain Support
+    def get_options_chain(self, symbol, contract_type="ALL", strike_count=None, 
+                        include_underlying_quote=False, strategy="SINGLE", 
+                        interval=None, strike=None, range_="ALL", from_date=None, 
+                        to_date=None, volatility=None, underlying_price=None, 
+                        interest_rate=None, days_to_expiration=None, 
+                        exp_month="ALL", option_type=None, entitlement=None):
+        """Fetch the option chain for a given symbol."""
+        url = f"{self.base_url}/marketdata/v1/chains"
+        params = {
+            "symbol": symbol,
+            "contractType": contract_type,
+            "strikeCount": strike_count,
+            "includeUnderlyingQuote": str(include_underlying_quote).lower(),  # Convert bool to 'true'/'false'
+            "strategy": strategy,
+            "interval": interval,
+            "strike": strike,
+            "range": range_,
+            "fromDate": from_date,
+            "toDate": to_date,
+            "volatility": volatility,
+            "underlyingPrice": underlying_price,
+            "interestRate": interest_rate,
+            "daysToExpiration": days_to_expiration,
+            "expMonth": exp_month,
+            "optionType": option_type,
+            "entitlement": entitlement
+        }
 
-    #     :param account_hash: The hashed account identifier.
-    #     :param from_entered_time: The starting time for the order search (ISO-8601 format). Default is today at 9:30 AM.
-    #     :param to_entered_time: The ending time for the order search (ISO-8601 format). Default is today at 4:00 PM.
-    #     :param max_results: The maximum number of orders to retrieve. Optional. Schwab's default is 3000
-    #     :param status: Filter orders by status (e.g., 'FILLED', 'CANCELED', etc). Optional.
-    #     :return: A JSON response containing the orders.
-    #     :raises HTTPError: If mandatory parameters are missing or if the request fails.
-    #     """
+        # Remove None values to avoid sending unnecessary query params
+        params = {k: v for k, v in params.items() if v is not None}
 
-    #     self.ensure_valid_token()
+        response = self.get_with_retry(url, params=params)
 
-    #     # Ensure mandatory parameters are provided
-    #     if account_hash is None:
-    #         raise HTTPError("400 Client Error: Mandatory parameter 'account_hash' is missing.")
+        response.raise_for_status()
 
-    #     # Set default times if not provided
-    #     eastern = pytz.timezone('America/New_York')
-    #     now = datetime.now(eastern)
-
-    #     if from_entered_time is None:
-    #         from_entered_time = now.replace(hour=9, minute=30, second=0, microsecond=0).isoformat()
-    #     if to_entered_time is None:
-    #         to_entered_time = now.replace(hour=16, minute=0, second=0, microsecond=0).isoformat()
-
-    #     # Build URL
-    #     url = f"{self.base_url}/trader/v1/accounts/{account_hash}/orders"
-
-    #     # Construct the params
-    #     params = {
-    #         'fromEnteredTime': from_entered_time,
-    #         'toEnteredTime': to_entered_time
-    #     }
-    #     if max_results is not None:
-    #         params['maxResults'] = max_results
-    #     if status is not None:
-    #         params['status'] = status
-
-    #     response = self.get_with_retry(url, params=params)
-    #     response.raise_for_status()
-    #     return response.json()
+        return response.json()
