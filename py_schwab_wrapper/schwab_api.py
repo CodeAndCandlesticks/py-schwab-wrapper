@@ -479,7 +479,7 @@ class SchwabAPI:
             "strategy": strategy,
             "interval": interval,
             "strike": strike,
-            "range": range_,
+            "range": range_, # avoids conflict with python's built in range() function.
             "fromDate": from_date,
             "toDate": to_date,
             "volatility": volatility,

@@ -17,12 +17,11 @@ from requests.exceptions import HTTPError
 load_dotenv()
 client_id = os.getenv('SCHWAB_CLIENT_ID')
 client_secret = os.getenv('SCHWAB_CLIENT_SECRET')
-account_hash = os.getenv('ACCOUNT_HASH_4')
 
 # Initialize the API wrapper with your credentials
 schwab_api = SchwabAPI(client_id=client_id, client_secret=client_secret)
 
-symbol = "$SPX"
+symbol = "QQQ"
 contract_type = "CALL"
 strike_count = 10
 include_underlying_quote = True
