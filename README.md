@@ -102,6 +102,98 @@ price_history = schwab_api.get_price_history(
 print(price_history)
 ```
 
+## Best Practices for Logging Management
+
+This library uses Python's built-in `logging` module to handle logging messages such as errors, warnings, and debug information. By default, the library does not configure logging on its own, leaving the responsibility of setting up logging to the user. This ensures that logging behavior can be customized to suit your application's needs.
+
+### How Logging Works in the Library
+
+- The library creates its own logger specific to the module using:
+  
+  ```python
+  logger = logging.getLogger(__name__)
+  ```
+
+- This allows users to control logging for this library independently of other modules in their application.
+
+### Configuring Logging in Your Application
+
+To enable and control logging for the library, you must configure the logging settings in your application. Here’s a basic example of how to do this:
+
+```python
+import logging
+
+# Configure logging for the entire application, including the library
+logging.basicConfig(
+    level=logging.INFO,  # Set to INFO, DEBUG, or ERROR depending on verbosity required
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[logging.StreamHandler()]  # Add a FileHandler if needed
+)
+
+# Optionally, configure a specific logger for this library
+logger = logging.getLogger('schwab_api')  # Replace with the correct logger name
+logger.setLevel(logging.DEBUG)  # Set to DEBUG or another level as needed
+```
+
+### Best Practices for Logging Management
+
+1. **Leave Logging Configuration to the Application**: 
+   - The library does not configure logging (e.g., no `logging.basicConfig()` calls). Users should configure logging as part of their application's setup.
+
+2. **Use Log Levels Appropriately**:
+   - The library emits logs at appropriate levels:
+     - **DEBUG**: For detailed diagnostic information.
+     - **INFO**: For general operational information.
+     - **WARNING**: For potentially harmful situations.
+     - **ERROR**: For error events that may require attention.
+   
+   Users can adjust the log level to control verbosity.
+
+3. **Log Output Destinations**:
+   - By default, logging outputs to the console, but you can configure logs to be written to a file, external logging services, or other destinations by adding `FileHandler`, `StreamHandler`, or custom handlers.
+   
+   Example:
+   ```python
+   logging.basicConfig(
+       level=logging.DEBUG,
+       format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+       handlers=[
+           logging.FileHandler('app.log'),  # Logs to a file
+           logging.StreamHandler()  # Also logs to the console
+       ]
+   )
+   ```
+
+4. **Silencing Logs**:
+   - If you don’t want to see logs from the library, you can silence them by setting the log level for the library’s logger to `WARNING` or higher:
+   
+   ```python
+   logging.getLogger('schwab_api').setLevel(logging.WARNING)
+   ```
+
+### Example Use Case
+
+Here’s an example of configuring logging in a typical application using this library:
+
+```python
+import logging
+from schwab_api import SchwabAPI
+
+# Set up logging for the application
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+
+# Initialize the library
+api = SchwabAPI(client_id='your_client_id', client_secret='your_client_secret')
+
+# Perform operations...
+```
+
+This gives you full control over how logging is handled in your application and ensures that log messages are informative without being intrusive.
+
+
 ## Contributing
 
 Feel free to contribute by submitting issues or pull requests on the [GitHub repository](https://github.com/CodeAndCandlesticks/py-schwab-wrapper).

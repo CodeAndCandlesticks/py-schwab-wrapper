@@ -10,6 +10,10 @@ import warnings
 import pytz
 from requests.exceptions import HTTPError
 from .utils.parameter_utils import get_inverse_instruction
+import logging
+
+# Create a logger specific to your library
+logger = logging.getLogger(__name__)  # __name__ ensures the logger is module-specific
 
 class SchwabAPI:
     def __init__(self, client_id, client_secret, base_url='https://api.schwabapi.com', load_token_func=None, save_token_func=None):
@@ -36,10 +40,10 @@ class SchwabAPI:
                 token = json.load(token_file)
             return token
         except (FileNotFoundError, json.JSONDecodeError) as e:
-            print(f"Error loading token: {e}")
+            logging.error(f"Error loading token: {e}")  
             return {'access_token': '', 'refresh_token': '', 'expires_at': 0}
         except Exception as e:  # Catch any other unexpected errors
-            print(f"Unexpected error during token loading: {e}")
+            logging.error(f"Unexpected error during token loading: {e}") 
             return {'access_token': '', 'refresh_token': '', 'expires_at': 0}
 
 
@@ -66,10 +70,10 @@ class SchwabAPI:
         if refresh_token:
             if token_expiry and float(token_expiry) > time.time():
                 expiry_datetime = datetime.fromtimestamp(float(token_expiry)).strftime('%Y-%m-%d %H:%M:%S')
-                print(f'Token is still valid, no need to refresh. Token expires at: {expiry_datetime}')
+                logger.info(f'Token is still valid, no need to refresh. Token expires at: {expiry_datetime}')
             else:   
                 try:
-                    print('Attempting to refresh the token...')
+                    logger.info('Attempting to refresh the token...')
 
                     headers = {
                         'Authorization': f'Basic {base64_auth_str}',
@@ -91,21 +95,21 @@ class SchwabAPI:
                                 new_token['expires_at'] = time.time() + int(expires_in)
                             self.save_token_func(new_token)  # Use save_token_func
                             self.session = requests.Session()
-                            print('Token refreshed and saved successfully!')
+                            logger.info('Token refreshed and saved successfully!')
                         else:
-                            print(f'Unexpected token response: {new_token}')
+                            logger.error(f'Unexpected token response: {new_token}')
                     elif response.status_code == 401:
-                        print('Unauthorized. Check your client_id and client_secret.')
+                        logger.error('Unauthorized. Check your client_id and client_secret.')
                     elif response.status_code == 400:
-                        print('Bad request. Check the refresh token or payload.')
+                        logger.error('Bad request. Check the refresh token or payload.')
                     else:
-                        print(f'Unexpected error: {response.status_code}')
+                        logger.error(f'Unexpected error: {response.status_code}')
                 except RequestException as e:
-                    print(f'Network error: {e}')
+                    logger.error(f'Network error: {e}')
                 except ValueError as e:
-                    print(f'Error parsing token response: {e}')
+                    logger.error(f'Error parsing token response: {e}')
         else:
-            print('No refresh token available.')
+            logger.error('No refresh token available.')
 
 
     def get_account_info(self):
@@ -117,9 +121,9 @@ class SchwabAPI:
             return response.json()
         except requests.HTTPError as http_err:
             if response.status_code == 401:
-                print("Unauthorized request. Please check credentials.")
+                logger.error("Unauthorized request. Please check credentials.")
             else:
-                print(f"HTTP error occurred: {http_err}")
+                logger.error(f"HTTP error occurred: {http_err}")
             raise  # Re-raise the error for upstream handling
 
     def get_with_retry(self, url, params=None, retries=3):
@@ -131,18 +135,18 @@ class SchwabAPI:
                 return response  # Return the full Response object
             except HTTPError as e:
                 if e.response.status_code == 401:  # Do not retry on 401 Unauthorized
-                    print(f"Unauthorized (401) error: {e}. Not retrying.")
+                    logger.error(f"Unauthorized (401) error: {e}. Not retrying.")
                     raise e
                 last_exception = e
-                print(f"Attempt {attempt + 1} failed with HTTP status {e.response.status_code}: {e}. Retrying...")
+                logger.error(f"Attempt {attempt + 1} failed with HTTP status {e.response.status_code}: {e}. Retrying...")
                 time.sleep(1)  # Delay before retrying
             except (Timeout, ConnectionError) as e:
                 last_exception = e
-                print(f"Attempt {attempt + 1} failed: {e}. Retrying...")
+                logger.error(f"Attempt {attempt + 1} failed: {e}. Retrying...")
                 time.sleep(1)  # Delay before retrying
             except RequestException as e:
                 # For other kinds of request exceptions, raise immediately without retrying
-                print(f"RequestException encountered: {e}.")
+                logger.error(f"RequestException encountered: {e}.")
                 raise e  # Re-raise the exception immediately
         # If all retries are exhausted, raise the last encountered exception
         raise last_exception if last_exception else Exception("Failed after multiple retry attempts")
@@ -219,7 +223,7 @@ class SchwabAPI:
             params['startDate'] = start_date
         if end_date is not None:
             params['endDate'] = end_date
-
+        
         response = self.get_with_retry(url, params=params)
         response.raise_for_status()
         return response.json()
@@ -299,8 +303,8 @@ class SchwabAPI:
         url = f"{self.base_url}/trader/v1/accounts/{account_hash}/orders"
 
         # Log the payload being sent
-        print("POSTing order to URL:", url)
-        print("Order payload being sent:", json.dumps(order_payload, indent=4))
+        logger.debug("POSTing order to URL:", url)
+        logger.debug("Order payload being sent:", json.dumps(order_payload, indent=4))
 
         # Use the session's post method without retries
         response = self.session.post(url, json=order_payload)
@@ -313,10 +317,12 @@ class SchwabAPI:
             return response.json()
         except ValueError:
             # Response is not JSON, returning the raw response text
-            print("Response did not contain JSON, returning raw text.")
+            logger.error("Response did not contain JSON, returning raw text.")
             return response.text
 
-    def place_single_order(self, account_hash, order_type, quantity, symbol, price=None, duration="DAY", session="NORMAL", instruction="BUY", **kwargs):
+    def place_single_order(self, account_hash, order_type, quantity, 
+                           symbol, price=None, duration="DAY", session="NORMAL", 
+                           instruction="BUY", **kwargs):
         """
         Place a single market or limit order without stop loss or profit target.
         
@@ -459,3 +465,41 @@ class SchwabAPI:
 
         # Send the order
         return self.post_order(account_hash, order_payload)
+
+    # Options Chain Support
+    def get_options_chain(self, symbol, contract_type="ALL", strike_count=None, 
+                        include_underlying_quote=False, strategy="SINGLE", 
+                        interval=None, strike=None, range_="ALL", from_date=None, 
+                        to_date=None, volatility=None, underlying_price=None, 
+                        interest_rate=None, days_to_expiration=None, 
+                        exp_month="ALL", option_type=None, entitlement=None):
+        """Fetch the option chain for a given symbol."""
+        url = f"{self.base_url}/marketdata/v1/chains"
+        params = {
+            "symbol": symbol,
+            "contractType": contract_type,
+            "strikeCount": strike_count,
+            "includeUnderlyingQuote": str(include_underlying_quote).lower(),  # Convert bool to 'true'/'false'
+            "strategy": strategy,
+            "interval": interval,
+            "strike": strike,
+            "range": range_, # avoids conflict with python's built in range() function.
+            "fromDate": from_date,
+            "toDate": to_date,
+            "volatility": volatility,
+            "underlyingPrice": underlying_price,
+            "interestRate": interest_rate,
+            "daysToExpiration": days_to_expiration,
+            "expMonth": exp_month,
+            "optionType": option_type,
+            "entitlement": entitlement
+        }
+
+        # Remove None values to avoid sending unnecessary query params
+        params = {k: v for k, v in params.items() if v is not None}
+
+        response = self.get_with_retry(url, params=params)
+
+        response.raise_for_status()
+
+        return response.json()
