@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2024-10-23
+### Added
+- Log entries for actions executed.
+- Support for options chains GET /chains.
+
+### Fixed
+- PBOT-237: Removing print statements used during debugging of the order call.
+
 ## [0.2.0] - 2024-09-28
 ### Added
 - Support for snake_case parameters for the get_price_history() method.
